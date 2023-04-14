@@ -1,19 +1,32 @@
 import React from "react";
-import "../styles/Header.module.css";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import styles from "../styles/Header.module.css";
 import { Link } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import LoginIcon from "@mui/icons-material/Login";
 
 const Header = () => {
   return (
     <header>
-      <Link to="/">
-        <AssignmentIcon />
-        ホーム
+      <div className={styles.headerElements}>
+        <Link to="/">
+          <HomeIcon />
+          ホーム
+        </Link>
+        <Link to="/reserve">
+          <DriveFileRenameOutlineIcon />
+          設備予約
+        </Link>
+        <Link to="/mypage">
+          <PersonOutlineIcon />
+          マイページ
+        </Link>
+      </div>
+      <Link to="#" onClick={() => {}}>
+        <LoginIcon />
+        ログアウト
       </Link>
-      <div>Home</div>
-      <div>予約</div>
-      <div>マイページ</div>
-      <div>button</div>
     </header>
   );
 };

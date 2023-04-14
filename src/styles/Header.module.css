@@ -1,4 +1,26 @@
 header {
-  background-color: #87a0f8;
+  background-color: #5b70bd;
   height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.headerElements {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10rem;
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+a:hover {
+  color: rgb(45, 46, 46);
 }
