@@ -6,7 +6,7 @@ import axios from 'axios';
 
 type Category = {
   id: string;
-  items: string[];
+  items: { id: number; name: string }[];
 };
 
 const Reserve = () => {
@@ -85,7 +85,7 @@ function DetailItem({
   itemDetailes: Category[];
 }) {
   const [detailItem, setDeteilItem] = useState('');
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<{ id: number; name: string }[]>([]);
 
   // MenuItemのvalueを変更する
   useEffect(() => {
@@ -107,8 +107,8 @@ function DetailItem({
             value={detailItem}
           >
             {items?.map((item) => (
-              <MenuItem value={item} key={item}>
-                {item}
+              <MenuItem value={item.name} key={item.id}>
+                {item.name}
               </MenuItem>
             ))}
           </Select>
