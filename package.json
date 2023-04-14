@@ -3,11 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
@@ -31,7 +28,7 @@
     "prepare": "git config --local core.hooksPath '.git-hooks'",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom --verbose",
     "eject": "react-scripts eject",
     "mock-api": "json-server --watch data/db.json --port 8000"
   },
@@ -54,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "json-server": "^0.17.3",
     "msw": "^0.35.0"
   }
 }

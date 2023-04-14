@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Top from './components/Top';
 import Header from './components/Header';
-import Reserve from './components/Reserve';
+import Reserve from './components/Reserve/Reserve';
 
 function App() {
   return (
