@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import styles from '../../styles/Top.module.css';
 import ItemBox from './ItemBox';
+import { Item } from '../../types/Item';
 
-type Item = { id: string; name: string; category: string };
 type Props = { category: string; items: Array<Item> };
 
 const Items = ({ category, items }: Props) => {
