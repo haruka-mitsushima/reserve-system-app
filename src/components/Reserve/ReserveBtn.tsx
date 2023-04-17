@@ -98,7 +98,7 @@ const ReserveBtn = () => {
 
   if (successMsg === 'OK') {
     console.log('北');
-    // navigate('/Completed');
+    navigate('/Completed');
   }
 
   return (
