@@ -42,7 +42,7 @@ const AddItem = () => {
     const name = data.get("name")?.toString();
     const category = data.get("category")?.toString();
     if (!name || !category) return;
-    await axios.post("http://localhost:8000/Items", { name, category });
+    await axios.post("http://localhost:8000/items", { name, category });
     navigate("/");
   };
 
@@ -93,11 +93,7 @@ const AddItem = () => {
                   MenuProps={MenuProps}
                 >
                   {categories.map((category) => (
-                    <MenuItem
-                      key={category}
-                      value={category}
-                      // style={getStyles(category, categoryName, theme)}
-                    >
+                    <MenuItem key={category} value={category}>
                       {category}
                     </MenuItem>
                   ))}
