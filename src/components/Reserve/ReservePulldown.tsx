@@ -20,8 +20,6 @@ function Pulldown({
   const dispatch = useDispatch();
   const addItems = useSelector(selectAdd);
 
-console.log(addItems)
-
   return (
     <>
       {isSelect ? (
