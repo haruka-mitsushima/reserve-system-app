@@ -13,6 +13,7 @@ import { fetchAsyncRegister } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../app/store';
+import { Link } from '@mui/material';
 
 const theme = createTheme();
 
@@ -23,13 +24,16 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState("")
 
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if(!name || !email || !password) {
+        alert("未入力の項目があります")
+        return
+    }
     const result = await dispatch(
       fetchAsyncRegister({
         name: name,
-        email:email,
+        email: email,
         password: password,
         reservedItem: []
     })
@@ -37,7 +41,7 @@ export default function Register() {
     console.log(result)
     if (fetchAsyncRegister.fulfilled.match(result)) {
       console.log("Register完了")
-      // navegate('/login')
+      navigate('/login')
     } else {
       console.log("Registration error!");
     }
@@ -109,6 +113,15 @@ export default function Register() {
             >
               ユーザー登録
             </Button>
+            <Grid container>
+              <Grid item xs={8.5}>
+              </Grid>
+              <Grid item xs={3.5}>
+                <Link href="/login">
+                  {"登録済みの方はこちら"}
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
         </Box>
       </Container>

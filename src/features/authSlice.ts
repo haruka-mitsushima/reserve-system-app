@@ -4,7 +4,7 @@ import axios from "axios";
 const apiUrl = "http://localhost:8000/"
 
 export const fetchAsyncLogin = createAsyncThunk("login/post", async(auth: {email: string, password: string}) => {
-    const res = await axios.get(`${apiUrl}user?email=${auth.email}&password=${auth.password}` ,{
+    const res = await axios.get(`${apiUrl}users?email=${auth.email}&password=${auth.password}` ,{
 
         headers: {
             "Content-Type": "application/json"
@@ -35,7 +35,20 @@ export const authSlice = createSlice({
     reducers: {},
     extraReducers:(builder) => {
         builder.addCase(fetchAsyncLogin.fulfilled, (state,action) => {
-            sessionStorage.setItem('auth', action.payload.name)
+            console.log(action.payload)
+            if(!action.payload[0]){
+                // console.log("ログイン失敗")
+                alert('ログインに失敗しました')
+            } else {
+            const obj = {
+                id: action.payload[0].id,
+                name: action.payload[0].name,
+              };
+              
+              //オブジェクトをJSON文字列に変換
+              const jsonObj = JSON.stringify(obj);
+            sessionStorage.setItem('auth', jsonObj)
+            }
         })
     }
 })
