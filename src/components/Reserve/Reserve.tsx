@@ -39,8 +39,7 @@ const Reserve = () => {
     const value = e.target.value;
     setSelectedItem(value);
     setIsSelect(true);
-    const detailItems = categories.filter((category) => category === value);
-    let item = await fetchGetItems(detailItems[0]);
+    let item = await fetchGetItems(value);
     setItemDetailes(item);
   };
 
