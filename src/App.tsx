@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AddItem from './components/AddItem';
 import Reserve from './components/Reserve/Reserve';
+import { Completed } from './components/Reserve/Completed';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addItem" element={<AddItem />} />
+        <Route path="/completed" element={<Completed />} />
       </Routes>
     </Router>
   );
