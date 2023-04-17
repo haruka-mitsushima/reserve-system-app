@@ -32,7 +32,7 @@
     "prepare": "git config --local core.hooksPath '.git-hooks'",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom --verbose",
     "eject": "react-scripts eject",
     "mock-api": "json-server --watch data/db.json --port 8000"
   },
@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "json-server": "^0.17.3",
     "msw": "^0.35.0"
   }
 }

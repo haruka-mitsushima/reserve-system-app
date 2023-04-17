@@ -25,15 +25,6 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-#__next {
-  padding-top: 7rem;
-  height: 100vh;
-}
-
 main {
   max-width: 120rem;
   margin: 0 auto;

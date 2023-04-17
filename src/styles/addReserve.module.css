@@ -1,0 +1,25 @@
+.boxWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.mb {
+  margin-bottom: 2rem;
+}
+
+.main {
+  font-size: 1.5rem;
+}
+
+.dateForm {
+  margin-left: 2rem;
+  width: 30rem;
+  height: 4.5rem;
+  border: solid rgb(171, 171, 171) 1px;
+}
+
+.btn {
+  font-size: 3rem;
+}
