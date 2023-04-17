@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux';
 import { fetchAsyncLogin } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../app/store';
+import Grid from '@mui/material/Grid';
+import { Link } from '@mui/material';
 
 const theme = createTheme();
 
@@ -19,9 +21,19 @@ export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isLogin, setIsLogin] = useState(true)
   const navigate = useNavigate()
 
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const result = await dispatch(
+        fetchAsyncLogin({ email: email, password: password })
+      );
+      if (fetchAsyncLogin.fulfilled.match(result)) {
+        navigate("/");
+      } else {
+        return
+      }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -43,7 +55,8 @@ export default function Login() {
             Login
           </Typography>
           <Box component="form"
-            noValidate sx={{ mt: 1 }}>
+            noValidate sx={{ mt: 1 }}
+            onSubmit={handleSubmit}>
             <TextField
               margin="normal"
               required
@@ -53,6 +66,7 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -63,7 +77,7 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               type="submit"
@@ -71,8 +85,17 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Login
+              ログイン
             </Button>
+            <Grid container>
+              <Grid item xs={8}>
+              </Grid>
+              <Grid item xs={4}>
+                <Link href="/register">
+                  {"ユーザー登録はこちら"}
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
         </Box>
       </Container>
