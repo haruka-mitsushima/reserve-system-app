@@ -22,14 +22,6 @@ export default function Login() {
   const [isLogin, setIsLogin] = useState(true)
   const navigate = useNavigate()
 
-  const handleSubmit = async () => {
-    // const result = await dispatch(fetchAsyncLogin({email: email, password: password}))
-    //     if(fetchAsyncLogin.fulfilled.match(result)) {
-    //         navigate('/')
-    //     }else {
-    //         return 
-    //     }
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -51,7 +43,6 @@ export default function Login() {
             Login
           </Typography>
           <Box component="form"
-            onSubmit={handleSubmit}
             noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
