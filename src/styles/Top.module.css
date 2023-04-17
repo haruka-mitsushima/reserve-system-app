@@ -1,0 +1,10 @@
+.Top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+img {
+  margin-bottom: 1.5rem;
+}
