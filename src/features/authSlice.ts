@@ -15,8 +15,8 @@ export const fetchAsyncLogin = createAsyncThunk("login/post", async(auth: {email
 
 export const fetchAsyncRegister = createAsyncThunk(
     "register/post",
-    async (auth) => {
-        const res = await axios.post(`${apiUrl}user`, auth, {
+    async (auth: {name: string, email: string, password: string, reservedItem: Array<any>}) => {
+        const res = await axios.post(`${apiUrl}users/`, auth, {
             headers: {
           "Content-Type": "application/json",
         },

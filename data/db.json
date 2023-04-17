@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "name": "らう",
+      "email": "maito@example.com",
+      "password": "1111",
+      "reservedItem": [],
+      "id": 1
+    },
+    {
+      "name": "もも",
+      "email": "a@example.com",
+      "password": "1111",
+      "reservedItem": [],
+      "id": 2
+    }
+  ]
+}

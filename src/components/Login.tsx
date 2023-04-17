@@ -13,7 +13,7 @@ import { fetchAsyncLogin } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../app/store';
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -24,7 +24,7 @@ export default function Login() {
 
 
   return (
-    <ThemeProvider theme={theme}>
+    // <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs" >
         <CssBaseline />
         <Box
@@ -76,6 +76,6 @@ export default function Login() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
