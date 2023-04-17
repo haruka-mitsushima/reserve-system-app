@@ -18,35 +18,34 @@ import { Link } from '@mui/material';
 const theme = createTheme();
 
 export default function Register() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch<AppDispatch>()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState("")
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if(!name || !email || !password) {
-        alert("未入力の項目があります")
-        return
+    if (!name || !email || !password) {
+      alert('未入力の項目があります');
+      return;
     }
     const result = await dispatch(
       fetchAsyncRegister({
         name: name,
         email: email,
         password: password,
-        reservedItem: []
-    })
+        reservedItem: [],
+      }),
     );
-    console.log(result)
+    console.log(result);
     if (fetchAsyncRegister.fulfilled.match(result)) {
-      console.log("Register完了")
-      navigate('/login')
+      //   console.log("Register完了")
+      navigate('/login');
     } else {
-      console.log("Registration error!");
+      //   console.log("Registration error!");
     }
-  }
-
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -58,16 +57,21 @@ export default function Register() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingBottom: 16
+            paddingBottom: 16,
           }}
         >
-          <Avatar sx={{ m: 1}}>
-            <HowToRegIcon fontSize='large'/>
+          <Avatar sx={{ m: 1 }}>
+            <HowToRegIcon fontSize="large" />
           </Avatar>
           <Typography component="h1" variant="h5">
             Register
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -114,12 +118,9 @@ export default function Register() {
               ユーザー登録
             </Button>
             <Grid container>
-              <Grid item xs={8.5}>
-              </Grid>
+              <Grid item xs={8.5}></Grid>
               <Grid item xs={3.5}>
-                <Link href="/login">
-                  {"登録済みの方はこちら"}
-                </Link>
+                <Link href="/login">{'登録済みの方はこちら'}</Link>
               </Grid>
             </Grid>
           </Box>
