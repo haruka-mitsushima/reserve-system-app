@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { Reservation } from '../types/Reservation';
 
 const apiUrl = 'http://localhost:8000/';
 
@@ -24,7 +25,7 @@ export const fetchAsyncRegister = createAsyncThunk(
     name: string;
     email: string;
     password: string;
-    reservedItem: Array<any>;
+    reservedItem: Array<Reservation>;
   }) => {
     const res = await axios.post(`${apiUrl}users/`, auth, {
       headers: {
