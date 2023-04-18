@@ -48,7 +48,6 @@ export default function Register() {
         reservedItem: [],
       }),
     );
-    console.log(result);
     if (fetchAsyncRegister.fulfilled.match(result)) {
       navigate('/login');
     } else {

@@ -1,106 +1,94 @@
-import React, { FormEvent, useState } from 'react';
-import styles from '../styles/AddItem.module.css';
-import { useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import React from 'react';
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Button from '@mui/material/Button';
-import axios from 'axios';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const categories = ['会議室', '社用車', 'PC'];
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+const theme = createTheme({
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#ececec',
+        },
+      },
     },
   },
-};
+});
 
-const AddItem = () => {
-  const navigate = useNavigate();
-  const [categoryName, setCategoryName] = useState<string>('');
-
+export default function MyPage() {
   return (
-    <div className={styles.AddItem}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: 'white',
-          borderRadius: 10,
-          py: 0,
-          px: 4,
-          height: 450,
-          width: 700,
-          boxShadow: 10,
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          設備を追加する
-        </Typography>
-        <Box component="form" noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="name"
-                label="名前"
-                name="name"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl sx={{ width: 500 }}>
-                <InputLabel id="category">タグ</InputLabel>
-                <Select
-                  data-testid="select"
-                  labelId="category"
-                  id="category"
-                  name="category"
-                  value={categoryName}
-                  input={
-                    <OutlinedInput id="select-multiple-chip" label="Chip" />
-                  }
-                  MenuProps={MenuProps}
-                >
-                  {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth={false} sx={{ maxWidth: '100%' }}>
+        <CssBaseline />
+        <Grid container>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={6} place-content="center">
+            <Box
+              sx={{
+                marginTop: 16,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                paddingTop: 8,
+                paddingBottom: 8,
+                bgcolor: '#fff',
+                boxShadow: 10,
+                borderRadius: 10,
+              }}
+            >
+              <Avatar sx={{ m: 1 }}>
+                <HowToRegIcon fontSize="large" />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                マイページ
+              </Typography>
+              <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      autoComplete="given-name"
+                      name="name"
+                      required
+                      fullWidth
+                      id="name"
+                      label="Name"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
           </Grid>
-          <Button
-            data-testid="button"
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: 3,
-              mb: 2,
-              bgcolor: '#4970a3',
-              ':hover': { background: '#3b5a84' },
-            }}
-          >
-            登録する
-          </Button>
-        </Box>
-      </Box>
-    </div>
+          <Grid item xs={3}></Grid>
+        </Grid>
+      </Container>
+    </ThemeProvider>
   );
-};
-
-export default AddItem;
+}
