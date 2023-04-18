@@ -8,10 +8,12 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { Completed } from '../components/Reserve/Completed';
 
+
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
+
 
 const handlers = [
   rest.get(`http://localhost:8000/items/`, (req, res, ctx) => {
@@ -44,7 +46,7 @@ const handlers = [
       }),
     );
   }),
-  rest.patch('http://localhost:8000/users/1/', (req, res, ctx) => {
+  rest.patch('http://localhost:8000/users/1', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -73,26 +75,33 @@ const handlers = [
       }),
     );
   }),
-  rest.get('http://localhost:8000/reservations', (req, res, ctx) => {
+  rest.get('http://localhost:8000/users/1', (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json([
-        {
-          title: 'sample',
-          item: {
-            id: 2,
-            name: '社用車2',
-          },
-          date: '2023-04-17',
-          startTime: '10:00',
-          endTime: '17:00',
-          user: {
-            id: 1,
-            name: 'test',
-          },
-          id: 1,
+      ctx.json({
+        user: {
+          name: 'test3',
+          email: 'test3@example.com',
+          password: 'password',
+          reservedItem: [
+            {
+              title: 'sample',
+              item: {
+                id: 2,
+                name: '社用車2',
+              },
+              date: '2023-04-17',
+              startTime: '10:00',
+              endTime: '17:00',
+              user: {
+                id: 1,
+                name: 'test',
+              },
+              id: 1,
+            },
+          ],
         },
-      ]),
+      }),
     );
   }),
 ];
@@ -199,15 +208,11 @@ describe('Reserve Component Test Case', () => {
     await userEvent.click(screen.getByTestId('btn-post'));
     // screen.debug()
     // expect(await screen.findByText('OK')).toBeInTheDocument();
-    // expect(mockNavigate).toBeCalledWith('/Completed');
+    // expect(mockNavigate).toBeCalledWith('/Completed/0');
     // expect(mockNavigate).toBeCalledTimes(1);
   });
   it('should render the added new reservation', async () => {
-    render(
-      <Provider store={store}>
-        <Completed />
-      </Provider>,
-    );
+    render(<Completed />);
     expect(screen.queryByText('sample')).toBeNull();
     expect(screen.queryByText('社用車2')).toBeNull();
     expect(screen.queryByText('2023-04-17')).toBeNull();

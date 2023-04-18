@@ -1,11 +1,12 @@
 import { Button, FormControl } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import styles from '../../styles/addReserve.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAdd, add } from '../../features/addReserveSlice';
 import axios from 'axios';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 
 // エラーがaxiosに関するエラーか確かめる
 function isAxiosError(error: any): error is AxiosError {
@@ -22,12 +23,12 @@ const ReserveBtn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // ユーザーデータ取得
   let data = sessionStorage.getItem('auth');
 
   useEffect(() => {
     if (data !== null) {
       const user = JSON.parse(data);
-      console.log(user);
       dispatch(
         add({
           ...addItems,
@@ -71,11 +72,15 @@ const ReserveBtn = () => {
 
     try {
       await axios.post(`http://localhost:8000/reservations`, addItems);
-      const data = await axios.patch(`http://localhost:8000/users/${userId}`, {
-        reservedItem: addItems,
+     
+      const req = await fetch(`http://localhost:8000/users/${userId}`);
+      const data = await req.json();
+      const item = data.reservedItem;
+      item.push(addItems);
+      await axios.patch(`http://localhost:8000/users/${userId}`, {
+        reservedItem: item,
       });
-      console.log(data.statusText);
-      setSuccessMsg(data.statusText);
+      
       // addItemsの値をリセット
       dispatch(
         add({
@@ -86,7 +91,8 @@ const ReserveBtn = () => {
           endTime: '9:00',
           user: { id: 0, name: '' },
         }),
-      );
+        );
+        navigate(`/Completed/${userId}`);
     } catch (e) {
       if (isAxiosError(e)) {
         setErr(e.response?.statusText);
@@ -94,12 +100,11 @@ const ReserveBtn = () => {
     }
   };
 
-  console.log(successMsg);
+  // console.log(successMsg);
 
-  if (successMsg === 'OK') {
-    console.log('北');
-    navigate('/Completed');
-  }
+  // if (successMsg === 'OK') {
+  //   console.log('北');
+  // }
 
   return (
     <div>

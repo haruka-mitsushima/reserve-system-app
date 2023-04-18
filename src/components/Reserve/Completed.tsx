@@ -1,28 +1,35 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import styles from '../../styles/addReserve.module.css';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Reservation } from '../../types/Reservation';
-
+import { useParams } from 'react-router-dom';
 
 export const Completed = () => {
+  const [userId, setUserId] = useState(0);
   const [item, setItem] = useState<Reservation>();
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchGetItems = async () => {
-      const reservations = await axios.get(
-        `http://localhost:8000/reservations`,
-      );
-      const result: Reservation[] = reservations.data;
-      // 配列の最後を取得(一番新しく追加された予約)
-      const newItem = result.slice(-1)[0];
-      setItem(newItem);
-    };
-    fetchGetItems();
-  }, []);
+  // const { id } = useParams<{ id: string }>();
 
+  let data = sessionStorage.getItem('auth');
+
+  useEffect(() => {
+    if (data !== null) {
+      const result = JSON.parse(data);
+      setUserId(result.id);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const result = await axios.get(`http://localhost:8000/users/${userId}`);
+      const newReservation = await result.data.reservedItem.slice(-1)[0];
+      setItem(newReservation);
+    };
+    fetchUser();
+  }, []);
 
   return (
     <>
