@@ -1,5 +1,5 @@
 import { Button, FormControl } from '@mui/material';
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../styles/addReserve.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAdd, add } from '../../features/addReserveSlice';
@@ -73,10 +73,14 @@ const ReserveBtn = () => {
     try {
       await axios.post(`http://localhost:8000/reservations`, addItems);
      
-      const req = await fetch(`http://localhost:8000/users/${userId}`);
-      const data = await req.json();
+      const req = await axios.get(`http://localhost:8000/users/${userId}`);
+      const data = req.data
       const item = data.reservedItem;
       item.push(addItems);
+      await axios.patch(`http://localhost:8000/users/${userId}`, {
+        reservedItem: item,
+      });
+
       await axios.patch(`http://localhost:8000/users/${userId}`, {
         reservedItem: item,
       });
@@ -99,6 +103,7 @@ const ReserveBtn = () => {
       }
     }
   };
+
 
 
   return (
