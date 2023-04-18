@@ -16,20 +16,19 @@ export const Completed = () => {
   let data = sessionStorage.getItem('auth');
 
   useEffect(() => {
-    if (data !== null) {
-      const result = JSON.parse(data);
-      setUserId(result.id);
-    }
-  }, [data]);
-
-  useEffect(() => {
+    let id;
     const fetchUser = async () => {
-      const result = await axios.get(`http://localhost:8000/users/${userId}`);
+      if (data === null) {
+        return;
+      }
+      const tmp = JSON.parse(data);
+      id = tmp.id;
+      const result = await axios.get(`http://localhost:8000/users/${id}`);
       const newReservation = await result.data.reservedItem.slice(-1)[0];
       setItem(newReservation);
     };
     fetchUser();
-  }, [userId]);
+  }, [data]);
 
   return (
     <>

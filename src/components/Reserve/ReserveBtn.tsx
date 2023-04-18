@@ -73,8 +73,8 @@ const ReserveBtn = () => {
     try {
       await axios.post(`http://localhost:8000/reservations`, addItems);
      
-      const req = await fetch(`http://localhost:8000/users/${userId}`);
-      const data = await req.json();
+      const req = await axios.get(`http://localhost:8000/users/${userId}`);
+      const data = req.data
       const item = data.reservedItem;
       item.push(addItems);
       await axios.patch(`http://localhost:8000/users/${userId}`, {
