@@ -1,12 +1,13 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-import Top from "./components/Top";
-import Header from "./components/Header";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import AddItem from "./components/AddItem";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+import Top from './components/Top';
+import Header from './components/Header';
+import Login from './components/Login';
+import Register from './components/Register';
+import AddItem from './components/AddItem';
 import Reserve from './components/Reserve/Reserve';
+import MyPage from './components/MyPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addItem" element={<AddItem />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </Router>
   );
