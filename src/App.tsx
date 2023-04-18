@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AddItem from './components/AddItem';
 import Reserve from './components/Reserve/Reserve';
+import MyPage from './components/MyPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addItem" element={<AddItem />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </Router>
   );
