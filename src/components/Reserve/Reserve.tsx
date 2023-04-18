@@ -10,22 +10,14 @@ import Pulldown from './ReservePulldown';
 import ReserveDate from './ReserveDateTime';
 import ReserveBtn from './ReserveBtn';
 import styles from '../../styles/addReserve.module.css';
-
-type Items = {
-  id: number;
-  name: string;
-  category: string;
-};
+import { Item } from '../../types/Item';
 
 const Reserve = () => {
   const [selectedItem, setSelectedItem] = useState('');
   const [isSelect, setIsSelect] = useState(false);
-  const [itemDetailes, setItemDetailes] = useState<Items[]>();
+  const [itemDetailes, setItemDetailes] = useState<Item[]>();
   const dispatch = useDispatch();
   const addItems = useSelector(selectAdd);
-
-  // カテゴリー
-  const categories = ['会議室', '社用車', 'PC'];
 
   async function fetchGetItems(item: string) {
     const items = await axios.get(
@@ -58,7 +50,7 @@ const Reserve = () => {
               borderRadius: 10,
               py: 0,
               px: 4,
-              height: 600,
+              height: 650,
               width: 800,
               boxShadow: 10,
             }}
@@ -89,6 +81,7 @@ const Reserve = () => {
                     設備を選択してください
                   </InputLabel>
                   <Select
+                    data-testid="select-segment"
                     labelId="select-label"
                     id="demo-simple-select"
                     label="item"
