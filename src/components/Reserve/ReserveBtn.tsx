@@ -1,5 +1,5 @@
 import { Button, FormControl } from '@mui/material';
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../styles/addReserve.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAdd, add } from '../../features/addReserveSlice';
@@ -80,6 +80,10 @@ const ReserveBtn = () => {
       await axios.patch(`http://localhost:8000/users/${userId}`, {
         reservedItem: item,
       });
+
+      await axios.patch(`http://localhost:8000/users/${userId}`, {
+        reservedItem: item,
+      });
       
       // addItemsの値をリセット
       dispatch(
@@ -99,6 +103,7 @@ const ReserveBtn = () => {
       }
     }
   };
+
 
 
   return (

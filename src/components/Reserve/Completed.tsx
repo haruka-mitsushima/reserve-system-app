@@ -8,7 +8,6 @@ import { Reservation } from '../../types/Reservation';
 import { useParams } from 'react-router-dom';
 
 export const Completed = () => {
-  const [userId, setUserId] = useState(0);
   const [item, setItem] = useState<Reservation>();
   const navigate = useNavigate();
   // const { id } = useParams<{ id: string }>();
