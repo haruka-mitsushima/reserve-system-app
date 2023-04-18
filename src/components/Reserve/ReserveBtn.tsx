@@ -100,11 +100,6 @@ const ReserveBtn = () => {
     }
   };
 
-  // console.log(successMsg);
-
-  // if (successMsg === 'OK') {
-  //   console.log('北');
-  // }
 
   return (
     <div>
