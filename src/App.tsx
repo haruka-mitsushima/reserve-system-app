@@ -21,7 +21,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/addItem" element={<AddItem />} />
         <Route path="/completed" element={<Completed />} />
-        <Route path="/item" element={<ItemPage />} />
       </Routes>
     </Router>
   );
