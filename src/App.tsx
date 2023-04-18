@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AddItem from './components/AddItem';
 import Reserve from './components/Reserve/Reserve';
+import { Completed } from './components/Reserve/Completed';
+import { ItemPage } from './components/Items/ItemPage';
 import MyPage from './components/MyPage';
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addItem" element={<AddItem />} />
+        <Route path="/completed/:id" element={<Completed />} />
+        <Route path="/item" element={<ItemPage />} />
         <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </Router>
