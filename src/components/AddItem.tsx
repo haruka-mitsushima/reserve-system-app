@@ -1,19 +1,19 @@
-import React, { FormEvent, useState } from "react";
-import styles from "../styles/AddItem.module.css";
-import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
-import axios from "axios";
+import React, { FormEvent, useState } from 'react';
+import styles from '../styles/AddItem.module.css';
+import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import axios from 'axios';
 
-const categories = ["会議室", "社用車", "PC"];
+const categories = ['会議室', '社用車', 'PC'];
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -27,7 +27,7 @@ const MenuProps = {
 
 const AddItem = () => {
   const navigate = useNavigate();
-  const [categoryName, setCategoryName] = useState<string>("");
+  const [categoryName, setCategoryName] = useState<string>('');
 
   const handleChange = (event: SelectChangeEvent<typeof categoryName>) => {
     const {
@@ -39,22 +39,22 @@ const AddItem = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const name = data.get("name")?.toString();
-    const category = data.get("category")?.toString();
+    const name = data.get('name')?.toString();
+    const category = data.get('category')?.toString();
     if (!name || !category) return;
-    await axios.post("http://localhost:8000/items", { name, category });
-    navigate("/");
+    await axios.post('http://localhost:8000/items', { name, category });
+    navigate('/');
   };
 
   return (
     <div className={styles.AddItem}>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "white",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: 'white',
           borderRadius: 10,
           py: 0,
           px: 4,
@@ -109,8 +109,8 @@ const AddItem = () => {
             sx={{
               mt: 3,
               mb: 2,
-              bgcolor: "#4970a3",
-              ":hover": { background: "#3b5a84" },
+              bgcolor: '#4970a3',
+              ':hover': { background: '#3b5a84' },
             }}
           >
             登録する

@@ -1,10 +1,11 @@
 import Card from './Card';
 import Typography from '@mui/material/Typography';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Item } from '../../types/Item';
 
 const ItemBox = (item: Item) => {
+  const navigate = useNavigate();
   let imageUrl = '';
   switch (item.category) {
     case '会議室':
@@ -20,14 +21,17 @@ const ItemBox = (item: Item) => {
       break;
   }
   return (
-    <Link to="/*">
-      <Card>
-        <img src={imageUrl} alt="" height={100} />
-        <Typography component="p" variant="h5" fontWeight="bold">
-          {item.name}
-        </Typography>
-      </Card>
-    </Link>
+    <Card onClick={() => navigate('/*')} data-testid="card">
+      <img src={imageUrl} alt={item.name} height={100} />
+      <Typography
+        component="p"
+        variant="h5"
+        fontWeight="bold"
+        data-testid={`name-${item.id}`}
+      >
+        {item.name}
+      </Typography>
+    </Card>
   );
 };
 
