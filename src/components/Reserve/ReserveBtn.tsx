@@ -92,7 +92,7 @@ const ReserveBtn = () => {
           user: { id: 0, name: '' },
         }),
         );
-        navigate(`/Completed/${userId}`);
+        navigate(`/Completed`);
     } catch (e) {
       if (isAxiosError(e)) {
         setErr(e.response?.statusText);

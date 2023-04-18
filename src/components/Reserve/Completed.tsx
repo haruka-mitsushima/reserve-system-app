@@ -29,7 +29,7 @@ export const Completed = () => {
       setItem(newReservation);
     };
     fetchUser();
-  }, []);
+  }, [userId]);
 
   return (
     <>
