@@ -8,6 +8,7 @@ import { Reservation } from '../../types/Reservation';
 import { useParams } from 'react-router-dom';
 
 export const Completed = () => {
+  const [userId, setUserId] = useState(0);
   const [item, setItem] = useState<Reservation>();
   const navigate = useNavigate();
   // const { id } = useParams<{ id: string }>();
@@ -15,19 +16,20 @@ export const Completed = () => {
   let data = sessionStorage.getItem('auth');
 
   useEffect(() => {
-    let id;
+    if (data !== null) {
+      const result = JSON.parse(data);
+      setUserId(result.id);
+    }
+  }, [data]);
+
+  useEffect(() => {
     const fetchUser = async () => {
-      if (data === null) {
-        return;
-      }
-      const tmp = JSON.parse(data);
-      id = tmp.id;
-      const result = await axios.get(`http://localhost:8000/users/${id}`);
+      const result = await axios.get(`http://localhost:8000/users/${userId}`);
       const newReservation = await result.data.reservedItem.slice(-1)[0];
       setItem(newReservation);
     };
     fetchUser();
-  }, [data]);
+  }, []);
 
   return (
     <>
