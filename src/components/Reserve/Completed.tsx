@@ -17,6 +17,7 @@ export const Completed = () => {
     let id;
     const fetchUser = async () => {
       if (data === null) {
+        navigate('/login');
         return;
       }
       const tmp = JSON.parse(data);

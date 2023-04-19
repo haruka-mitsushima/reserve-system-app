@@ -11,8 +11,12 @@ export const ItemPage = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const user = sessionStorage.getItem('auth');
 
   useEffect(() => {
+    if (user === null) {
+      navigate('/login');
+    }
     const fetchItem = async () => {
       const result = await axios.get(
         `http://localhost:8000/reservations?item.id=${id}`,

@@ -7,7 +7,6 @@ import axios from 'axios';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 // エラーがaxiosに関するエラーか確かめる
 function isAxiosError(error: any): error is AxiosError {
   return !!error.isAxiosError;
@@ -37,7 +36,7 @@ const ReserveBtn = () => {
       );
       setUserId(user.id);
     }
-  }, []);
+  }, [data]);
 
   type addItem = {
     title: string;
@@ -72,19 +71,14 @@ const ReserveBtn = () => {
 
     try {
       await axios.post(`http://localhost:8000/reservations`, addItems);
-     
       const req = await axios.get(`http://localhost:8000/users/${userId}`);
-      const data = req.data
+      const data = req.data;
       const item = data.reservedItem;
       item.push(addItems);
       await axios.patch(`http://localhost:8000/users/${userId}`, {
         reservedItem: item,
       });
 
-      await axios.patch(`http://localhost:8000/users/${userId}`, {
-        reservedItem: item,
-      });
-      
       // addItemsの値をリセット
       dispatch(
         add({
@@ -95,16 +89,14 @@ const ReserveBtn = () => {
           endTime: '9:00',
           user: { id: 0, name: '' },
         }),
-        );
-        navigate(`/Completed`);
+      );
+      navigate(`/Completed`);
     } catch (e) {
       if (isAxiosError(e)) {
         setErr(e.response?.statusText);
       }
     }
   };
-
-
 
   return (
     <div>
