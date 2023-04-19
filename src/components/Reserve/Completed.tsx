@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom';
 export const Completed = () => {
   const [item, setItem] = useState<Reservation>();
   const navigate = useNavigate();
-  // const { id } = useParams<{ id: string }>();
 
   let data = sessionStorage.getItem('auth');
 

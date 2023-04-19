@@ -20,7 +20,7 @@ const ItemBox = (item: Item) => {
       break;
   }
   return (
-    <Link to="/*">
+    <Link to={`/item/${item.id}`}>
       <Card>
         <img src={imageUrl} alt="" height={100} />
         <Typography component="p" variant="h5" fontWeight="bold">

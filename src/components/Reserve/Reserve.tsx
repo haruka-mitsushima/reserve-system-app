@@ -59,7 +59,7 @@ const Reserve = () => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <h1>設備予約</h1>
+                <h2 className={styles.title}>設備予約</h2>
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>
