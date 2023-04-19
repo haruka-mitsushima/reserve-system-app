@@ -71,7 +71,7 @@ export default function MyPage() {
                     <>
                       <Box sx={{ width: 800 }}>
                         <Typography
-                          variant="h3"
+                          variant="h4"
                           sx={{
                             mr: 1,
                             border: 1,
