@@ -13,7 +13,7 @@ export const ItemPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fectItem = async () => {
+    const fetchItem = async () => {
       const result = await axios.get(
         `http://localhost:8000/reservations?item.id=${id}`,
       );
@@ -23,7 +23,7 @@ export const ItemPage = () => {
         setItem(result.data);
       }
     };
-    fectItem();
+    fetchItem();
   }, [id]);
 
   return (
@@ -49,7 +49,7 @@ export const ItemPage = () => {
                   </p>
                   <p>
                     <span>予約時間：</span>
-                    {item.startTime}-{item.endTime}
+                    {item.startTime}~{item.endTime}
                   </p>
                 </div>
                 <div>
