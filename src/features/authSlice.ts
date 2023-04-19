@@ -56,7 +56,6 @@ export const authSlice = createSlice({
         };
         //オブジェクトをJSON文字列に変換
         const jsonObj = JSON.stringify(obj);
-        console.log(jsonObj);
         sessionStorage.setItem('auth', jsonObj);
       }
     });
