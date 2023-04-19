@@ -40,6 +40,8 @@ export default function MyPage() {
     }
   }, [navigate, user]);
 
+  const replace = /-/gi;
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth={false} sx={{ maxWidth: '100%' }}>
@@ -80,9 +82,7 @@ export default function MyPage() {
                         >
                           <Grid container spacing={2} paddingY={4}>
                             <Grid item xs={2.5}>
-                              {reservation.date
-                                .replace('-', '/')
-                                .replace('-', '/')}
+                              {reservation.date.replace(replace, '/')}
                             </Grid>
                             <Grid item xs={3}>
                               {reservation.startTime}~{reservation.endTime}
