@@ -80,7 +80,9 @@ export default function MyPage() {
                         >
                           <Grid container spacing={2} paddingY={4}>
                             <Grid item xs={2.5}>
-                              {reservation.date}
+                              {reservation.date
+                                .replace('-', '/')
+                                .replace('-', '/')}
                             </Grid>
                             <Grid item xs={3}>
                               {reservation.startTime}~{reservation.endTime}
