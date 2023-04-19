@@ -49,7 +49,7 @@ export default function MyPage() {
           <Grid item xs={10} place-content="center">
             <Box
               sx={{
-                marginTop: 16,
+                marginY: 16,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
