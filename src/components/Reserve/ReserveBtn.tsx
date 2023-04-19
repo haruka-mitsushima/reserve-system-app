@@ -1,4 +1,4 @@
-import { Button, FormControl } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styles from '../../styles/addReserve.module.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +16,6 @@ const ReserveBtn = () => {
   const [err, setErr] = useState<string | undefined>('');
   const [isFilledIn, setIsFilledIn] = useState(true);
   const [userId, setUserId] = useState(0);
-  const [successMsg, setSuccessMsg] = useState('');
 
   const addItems = useSelector(selectAdd);
   const dispatch = useDispatch();
@@ -101,7 +100,6 @@ const ReserveBtn = () => {
   return (
     <div>
       {err}
-      {successMsg}
       {isFilledIn || <p className={styles.center}>空欄箇所があります！</p>}
       <Button
         className={styles.btn}

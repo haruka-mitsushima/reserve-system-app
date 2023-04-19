@@ -28,7 +28,7 @@ export const ItemPage = () => {
       }
     };
     fetchItem();
-  }, [id]);
+  }, [id, navigate, user]);
 
   return (
     <>
