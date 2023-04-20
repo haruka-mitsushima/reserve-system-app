@@ -26,7 +26,6 @@ export default function MyPage() {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const user = sessionStorage.getItem('auth');
-  //   console.log(reservations);
 
   useEffect(() => {
     if (user === null) {
