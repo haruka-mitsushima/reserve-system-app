@@ -9,6 +9,7 @@ import AddItem from './components/AddItem';
 import Reserve from './components/Reserve/Reserve';
 import { Completed } from './components/Reserve/Completed';
 import MyPage from './components/MyPage';
+import { ItemPage } from './components/Items/ItemPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/addItem" element={<AddItem />} />
         <Route path="/completed" element={<Completed />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/item/:id" element={<ItemPage />} />
       </Routes>
     </Router>
   );

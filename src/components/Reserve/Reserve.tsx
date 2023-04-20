@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
@@ -11,6 +11,7 @@ import ReserveDate from './ReserveDateTime';
 import ReserveBtn from './ReserveBtn';
 import styles from '../../styles/addReserve.module.css';
 import { Item } from '../../types/Item';
+import { useNavigate } from 'react-router-dom';
 
 const Reserve = () => {
   const [selectedItem, setSelectedItem] = useState('');
@@ -18,6 +19,14 @@ const Reserve = () => {
   const [itemDetailes, setItemDetailes] = useState<Item[]>();
   const dispatch = useDispatch();
   const addItems = useSelector(selectAdd);
+  const navigate = useNavigate();
+  const user = sessionStorage.getItem('auth');
+
+  useEffect(() => {
+    if (user === null) {
+      navigate('/login');
+    }
+  });
 
   async function fetchGetItems(item: string) {
     const items = await axios.get(
@@ -59,7 +68,7 @@ const Reserve = () => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <h1>設備予約</h1>
+                <h2 className={styles.title}>設備予約</h2>
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>

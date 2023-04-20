@@ -24,10 +24,12 @@ const ReserveDateTime = () => {
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
+              // yyyy-mm-ddをyyyy/mm/ddに変換
+              const formatDate = e.target.value.replace(/-/g, `/`);
               dispatch(
                 add({
                   ...addItems,
-                  date: e.target.value,
+                  date: formatDate,
                 }),
               );
             }}

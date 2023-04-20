@@ -1,4 +1,4 @@
-import { Button, FormControl } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styles from '../../styles/addReserve.module.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,7 +6,6 @@ import { selectAdd, add } from '../../features/addReserveSlice';
 import axios from 'axios';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-
 
 // エラーがaxiosに関するエラーか確かめる
 function isAxiosError(error: any): error is AxiosError {
@@ -17,7 +16,6 @@ const ReserveBtn = () => {
   const [err, setErr] = useState<string | undefined>('');
   const [isFilledIn, setIsFilledIn] = useState(true);
   const [userId, setUserId] = useState(0);
-  const [successMsg, setSuccessMsg] = useState('');
 
   const addItems = useSelector(selectAdd);
   const dispatch = useDispatch();
@@ -37,7 +35,7 @@ const ReserveBtn = () => {
       );
       setUserId(user.id);
     }
-  }, []);
+  }, [data]);
 
   type addItem = {
     title: string;
@@ -72,19 +70,14 @@ const ReserveBtn = () => {
 
     try {
       await axios.post(`http://localhost:8000/reservations`, addItems);
-     
       const req = await axios.get(`http://localhost:8000/users/${userId}`);
-      const data = req.data
+      const data = req.data;
       const item = data.reservedItem;
       item.push(addItems);
       await axios.patch(`http://localhost:8000/users/${userId}`, {
         reservedItem: item,
       });
 
-      await axios.patch(`http://localhost:8000/users/${userId}`, {
-        reservedItem: item,
-      });
-      
       // addItemsの値をリセット
       dispatch(
         add({
@@ -95,8 +88,8 @@ const ReserveBtn = () => {
           endTime: '9:00',
           user: { id: 0, name: '' },
         }),
-        );
-        navigate(`/Completed`);
+      );
+      navigate(`/Completed`);
     } catch (e) {
       if (isAxiosError(e)) {
         setErr(e.response?.statusText);
@@ -104,12 +97,9 @@ const ReserveBtn = () => {
     }
   };
 
-
-
   return (
     <div>
       {err}
-      {successMsg}
       {isFilledIn || <p className={styles.center}>空欄箇所があります！</p>}
       <Button
         className={styles.btn}

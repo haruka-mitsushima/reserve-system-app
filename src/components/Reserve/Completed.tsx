@@ -1,16 +1,14 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import styles from '../../styles/addReserve.module.css';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Reservation } from '../../types/Reservation';
-import { useParams } from 'react-router-dom';
 
 export const Completed = () => {
   const [item, setItem] = useState<Reservation>();
   const navigate = useNavigate();
-  // const { id } = useParams<{ id: string }>();
 
   let data = sessionStorage.getItem('auth');
 
@@ -18,6 +16,7 @@ export const Completed = () => {
     let id;
     const fetchUser = async () => {
       if (data === null) {
+        navigate('/login');
         return;
       }
       const tmp = JSON.parse(data);
@@ -27,7 +26,7 @@ export const Completed = () => {
       setItem(newReservation);
     };
     fetchUser();
-  }, [data]);
+  }, [data, navigate]);
 
   return (
     <>
