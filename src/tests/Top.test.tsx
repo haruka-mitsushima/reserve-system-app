@@ -27,9 +27,14 @@ const handlers = [
           id: 2,
         },
         {
+          name: 'Surface - 01',
+          category: 'PC',
+          id: 3,
+        },
+        {
           name: 'ハイエース',
           category: '社用車',
-          id: 3,
+          id: 4,
         },
       ]),
     );
@@ -76,6 +81,11 @@ describe('Top', () => {
     expect(screen.getByText('会議室')).toBeInTheDocument();
     expect(screen.getByText('社用車')).toBeInTheDocument();
     expect(screen.getByText('PC')).toBeInTheDocument();
+    expect(await screen.findAllByTestId('card')).toBeTruthy();
+    expect(screen.getAllByTestId('card')[0]).toBeTruthy();
+    expect(screen.getAllByTestId('card')[1]).toBeTruthy();
+    expect(screen.getAllByTestId('card')[2]).toBeTruthy();
+    expect(screen.getAllByTestId('card')[3]).toBeTruthy();
   });
 
   it('2 Should render components correctly in Items component', async () => {
