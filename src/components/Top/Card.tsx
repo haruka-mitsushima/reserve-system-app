@@ -20,6 +20,7 @@ function Card(props: BoxProps, keyId: string) {
         alignItems: 'center',
         justifyContent: 'center',
         boxShadow: 1,
+        cursor: 'pointer',
       }}
       {...other}
     />
