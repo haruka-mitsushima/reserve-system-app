@@ -39,6 +39,10 @@ export default function MyPage() {
     }
   }, [navigate, user]);
 
+  const clickHandler = (reservation: Reservation) => {
+    navigate(`/reserve/edit/${reservation.id}`);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth={false} sx={{ maxWidth: '100%' }}>
@@ -92,6 +96,7 @@ export default function MyPage() {
                                 fullWidth
                                 variant="contained"
                                 sx={{ fontSize: 16 }}
+                                onClick={() => clickHandler(reservation)}
                               >
                                 編集
                               </Button>
