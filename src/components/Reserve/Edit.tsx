@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Reservation } from '../../types/Reservation';
 import { useQuery } from '@tanstack/react-query';
 import { times } from './time';
@@ -29,6 +29,27 @@ const Edit = () => {
   const [date, setDate] = useState(reservation?.date);
   const [startTime, setStartTime] = useState(reservation?.startTime);
   const [endTime, setEndTime] = useState(reservation?.endTime);
+  const navigate = useNavigate();
+
+  const updateReserve = {
+    title: title,
+    date: date,
+    startTime: startTime,
+    endTime: endTime,
+  };
+  const submitHandler = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    axios
+      .patch(`http://localhost:8000/reservations/${id}`, updateReserve)
+      .then(() => navigate('/mypage'));
+  };
+
+  const deleteHandler = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    axios
+      .delete(`http://localhost:8000/reservations/${id}`)
+      .then(() => navigate('/mypage'));
+  };
 
   const theme = createTheme({
     components: {
@@ -103,15 +124,13 @@ const Edit = () => {
                       <Select
                         id="demo-simple-select"
                         label="time"
-                        defaultValue={startTime}
+                        value={startTime}
                       >
                         {times.map((time) => (
                           <MenuItem
                             value={time}
                             key={time}
-                            onChange={(e: any) => {
-                              setStartTime(e.target.value);
-                            }}
+                            onClick={() => setStartTime(time)}
                           >
                             {time}
                           </MenuItem>
@@ -125,14 +144,14 @@ const Edit = () => {
                       <Select
                         id="demo-simple-select"
                         label="time"
-                        defaultValue={endTime}
+                        value={endTime}
                       >
                         {times.map((time) => (
                           <MenuItem
                             value={time}
                             key={time}
-                            onChange={(e: any) => {
-                              setEndTime(e.target.value);
+                            onClick={() => {
+                              setEndTime(time);
                             }}
                           >
                             {time}
@@ -142,20 +161,41 @@ const Edit = () => {
                     </FormControl>
                   </Grid>
                 </Grid>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    mt: 7,
-                    mb: 2,
-                    bgcolor: '#4970a3',
-                    fontSize: 16,
-                    width: 200,
-                    ':hover': { background: '#3b5a84' },
-                  }}
-                >
-                  更新する
-                </Button>
+                <Box>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      mt: 7,
+                      mb: 2,
+                      mr: 2,
+                      bgcolor: '#4970a3',
+                      fontSize: 16,
+                      width: 200,
+                      ':hover': { background: '#3b5a84' },
+                    }}
+                    onClick={submitHandler}
+                  >
+                    更新する
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      mt: 7,
+                      mb: 2,
+                      ml: 2,
+                      bgcolor: 'orange',
+                      fontSize: 16,
+                      width: 200,
+                      ':hover': { background: '#3b5a84' },
+                      textAlign: 'right',
+                    }}
+                    onClick={deleteHandler}
+                  >
+                    削除する
+                  </Button>
+                </Box>
               </Box>
             </Grid>
             <Grid item xs={1}></Grid>
