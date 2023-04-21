@@ -5,7 +5,7 @@ import Top from './components/Top/Top';
 import Header from './components/Header';
 import Login from './components/Login';
 import Register from './components/Register';
-import AddItem from './components/AddItem';
+import AddItem from './components/Management/AddItem';
 import Reserve from './components/Reserve/Reserve';
 import { Completed } from './components/Reserve/Completed';
 import MyPage from './components/MyPage';
