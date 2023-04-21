@@ -16,6 +16,7 @@ const ReserveBtn = () => {
   const [err, setErr] = useState<string | undefined>('');
   const [isFilledIn, setIsFilledIn] = useState(true);
   const [userId, setUserId] = useState(0);
+  const [success, setSuccess] = useState('');
 
   const addItems = useSelector(selectAdd);
   const dispatch = useDispatch();
@@ -74,10 +75,14 @@ const ReserveBtn = () => {
       const data = req.data;
       const item = data.reservedItem;
       item.push(addItems);
-      await axios.patch(`http://localhost:8000/users/${userId}`, {
-        reservedItem: item,
-      });
-
+      const statusMsg = await axios.patch(
+        `http://localhost:8000/users/${userId}`,
+        {
+          reservedItem: item,
+        },
+      );
+      // ユーザーのreservedItemを更新できたらsuccessの状態を更新する（テストのため）
+      setSuccess(statusMsg.statusText);
       // addItemsの値をリセット
       dispatch(
         add({
@@ -89,7 +94,6 @@ const ReserveBtn = () => {
           user: { id: 0, name: '' },
         }),
       );
-      navigate(`/Completed`);
     } catch (e) {
       if (isAxiosError(e)) {
         setErr(e.response?.statusText);
@@ -97,8 +101,15 @@ const ReserveBtn = () => {
     }
   };
 
+  useEffect(() => {
+    if (success === 'OK') {
+      navigate('/Completed');
+    }
+  }, [navigate, success]);
+
   return (
     <div>
+      {success}
       {err}
       {isFilledIn || <p className={styles.center}>空欄箇所があります！</p>}
       <Button

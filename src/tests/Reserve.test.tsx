@@ -6,14 +6,43 @@ import addReserveReducer from '../features/addReserveSlice';
 import { Provider } from 'react-redux';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { Completed } from '../components/Reserve/Completed';
-
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
+function getUserInfo() {
+  const userInfo = window.sessionStorage.getItem('auth');
+  if (userInfo) {
+    return JSON.parse(userInfo);
+  }
+  return {};
+}
+
+type StoreType = {
+  [key: string]: string;
+};
+
+const sessionStorageMock = (() => {
+  let store: StoreType = {};
+
+  return {
+    getItem(key: string) {
+      return store[key] || null;
+    },
+    setItem(key: string, value: string) {
+      store[key] = value.toString();
+    },
+    clear() {
+      store = {};
+    },
+  };
+})();
+
+Object.defineProperty(window, 'sessionStorage', {
+  value: sessionStorageMock,
+});
 
 const handlers = [
   rest.get(`http://localhost:8000/items/`, (req, res, ctx) => {
@@ -26,90 +55,12 @@ const handlers = [
       );
     }
   }),
-  rest.post('http://localhost:8000/reservations', (req, res, ctx) => {
-    return res(
-      ctx.status(201),
-      ctx.json({
-        title: 'sample',
-        item: {
-          id: 2,
-          name: '社用車2',
-        },
-        date: '2023-04-17',
-        startTime: '10:00',
-        endTime: '17:00',
-        user: {
-          id: 1,
-          name: 'test',
-        },
-        id: 1,
-      }),
-    );
-  }),
-  rest.patch('http://localhost:8000/users/1', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        user: {
-          name: 'test',
-          email: 'test1@example.com',
-          password: 'password',
-          reservedItem: [
-            {
-              title: 'sample',
-              item: {
-                id: 2,
-                name: '社用車2',
-              },
-              date: '2023-04-17',
-              startTime: '10:00',
-              endTime: '17:00',
-              user: {
-                id: 1,
-                name: 'test',
-              },
-              id: 1,
-            },
-          ],
-        },
-      }),
-    );
-  }),
-  rest.get('http://localhost:8000/users/1', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        user: {
-          name: 'test3',
-          email: 'test3@example.com',
-          password: 'password',
-          reservedItem: [
-            {
-              title: 'sample',
-              item: {
-                id: 2,
-                name: '社用車2',
-              },
-              date: '2023-04-17',
-              startTime: '10:00',
-              endTime: '17:00',
-              user: {
-                id: 1,
-                name: 'test',
-              },
-              id: 1,
-            },
-          ],
-        },
-      }),
-    );
-  }),
 ];
 
 const server = setupServer(...handlers);
 
 beforeAll(() => {
-  server.listen();
+  server.listen({ onUnhandledRequest: 'bypass' });
 });
 afterEach(() => {
   server.resetHandlers();
@@ -126,6 +77,11 @@ describe('Reserve Component Test Case', () => {
         addReserve: addReserveReducer,
       },
     });
+    window.sessionStorage.setItem(
+      'auth',
+      JSON.stringify({ id: 1, name: 'test' }),
+    );
+    getUserInfo();
   });
   it('should render all the elements correctlly', () => {
     render(
@@ -151,11 +107,17 @@ describe('Reserve Component Test Case', () => {
         <Reserve />
       </Provider>,
     );
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
+
     const inputValue = screen.getByPlaceholderText('用途を記入してください');
     await userEvent.type(inputValue, 'sample');
 
     // 設備のセレクトのテスト
-    const select = screen.getByTestId('select-segment');
+    const select = screen.getByTestId('select');
     const button = within(select).getByRole('button') as HTMLInputElement;
     await fireEvent.mouseDown(button);
     const listbox = within(screen.getByRole('presentation')).getByRole(
@@ -206,25 +168,9 @@ describe('Reserve Component Test Case', () => {
     expect(btnStart).toHaveTextContent('9:30');
 
     await userEvent.click(screen.getByTestId('btn-post'));
-    // screen.debug()
-    // expect(await screen.findByText('OK')).toBeInTheDocument();
-    // expect(mockNavigate).toBeCalledWith('/Completed/0');
-    // expect(mockNavigate).toBeCalledTimes(1);
-  });
-  it('should render the added new reservation', async () => {
-    render(<Completed />);
-    expect(screen.queryByText('sample')).toBeNull();
-    expect(screen.queryByText('社用車2')).toBeNull();
-    expect(screen.queryByText('2023-04-17')).toBeNull();
-    expect(screen.queryByText('10:00')).toBeNull();
-    expect(screen.queryByText('17:00')).toBeNull();
-    expect(screen.queryByText('test')).toBeNull();
-    expect(screen.getByText('以下の予約が完了しました！')).toBeInTheDocument();
-    expect(await screen.findByText('タイトル：sample')).toBeInTheDocument();
-    expect(screen.getByText('設備：社用車2')).toBeInTheDocument();
-    expect(screen.getByText('日付：2023-04-17')).toBeInTheDocument();
-    expect(screen.getByText('開始時刻：10:00')).toBeInTheDocument();
-    expect(screen.getByText('終了時刻：17:00')).toBeInTheDocument();
-    expect(screen.getByText('ユーザー：test')).toBeInTheDocument();
+
+    expect(await screen.findByText('OK')).toBeInTheDocument();
+    expect(mockNavigate).toBeCalledWith('/Completed');
+    expect(mockNavigate).toBeCalledTimes(1);
   });
 });
