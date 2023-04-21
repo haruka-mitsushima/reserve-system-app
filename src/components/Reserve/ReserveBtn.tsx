@@ -75,8 +75,6 @@ const ReserveBtn = () => {
         `http://localhost:8000/reservations?userId=${userId}`,
       );
       const data = req.data;
-      // const item = data.reservedItem;
-      // item.push(addItems);
       const statusMsg = await axios.patch(
         `http://localhost:8000/users/${userId}`,
         {
