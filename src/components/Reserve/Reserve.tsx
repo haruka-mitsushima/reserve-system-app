@@ -5,7 +5,6 @@ import { FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAdd, add } from '../../features/addReserveSlice';
-// フォームのコンポーネント
 import Pulldown from './ReservePulldown';
 import ReserveDate from './ReserveDateTime';
 import ReserveBtn from './ReserveBtn';
@@ -25,8 +24,8 @@ const Reserve = () => {
   useEffect(() => {
     if (user === null) {
       navigate('/login');
-    }
-  });
+    } 
+  }, [navigate, user]);
 
   async function fetchGetItems(item: string) {
     const items = await axios.get(
@@ -47,6 +46,7 @@ const Reserve = () => {
   return (
     <>
       <main className={styles.main}>
+      
         <div className={styles.boxWrapper}>
           <Box
             component="form"
@@ -90,7 +90,7 @@ const Reserve = () => {
                     設備を選択してください
                   </InputLabel>
                   <Select
-                    data-testid="select-segment"
+                    data-testid="select"
                     labelId="select-label"
                     id="demo-simple-select"
                     label="item"
