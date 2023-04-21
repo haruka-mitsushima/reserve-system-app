@@ -1,0 +1,38 @@
+/* タイトル関係 */
+.title {
+  font-size: 2.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+.titleWrapper {
+  margin: 7rem 0;
+}
+
+/* ul, li関係 */
+ul {
+  list-style: none;
+  padding-inline-start: 0px;
+}
+.list {
+  display: flex;
+  font-size: 1.8rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0 0 8px gray;
+}
+.listContent {
+  display: flex;
+  align-items: center;
+}
+
+.list p {
+  margin-right: 1rem;
+}
+
+/* 全体のwidthの設定 */
+.content {
+  width: 80%;
+}

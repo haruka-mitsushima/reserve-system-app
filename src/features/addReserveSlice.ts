@@ -9,8 +9,9 @@ type Items = {
 type addItem = {
   title: string;
   item: { id: 0; name: string };
-  startdate: string;
-  endDate: string;
+  date: string;
+  startTime: string;
+  endTime: string;
   user: { id: number; name: string };
 };
 
@@ -19,8 +20,8 @@ const initialState = {
     title: '',
     item: { id: 0, name: '' },
     date: '',
-    startTime: '',
-    endTime: '',
+    startTime: '9:00',
+    endTime: '9:00',
     user: { id: 0, name: '' },
   },
 };

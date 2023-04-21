@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAdd, add } from '../../features/addReserveSlice';
-// フォームのコンポーネント
 import Pulldown from './ReservePulldown';
 import ReserveDate from './ReserveDateTime';
 import ReserveBtn from './ReserveBtn';
 import styles from '../../styles/addReserve.module.css';
-
-type Items = {
-  id: number;
-  name: string;
-  category: string;
-};
+import { Item } from '../../types/Item';
+import { useNavigate } from 'react-router-dom';
 
 const Reserve = () => {
   const [selectedItem, setSelectedItem] = useState('');
   const [isSelect, setIsSelect] = useState(false);
-  const [itemDetailes, setItemDetailes] = useState<Items[]>();
+  const [itemDetailes, setItemDetailes] = useState<Item[]>();
   const dispatch = useDispatch();
   const addItems = useSelector(selectAdd);
+  const navigate = useNavigate();
+  const user = sessionStorage.getItem('auth');
 
-  // カテゴリー
-  const categories = ['会議室', '社用車', 'PC'];
+  useEffect(() => {
+    if (user === null) {
+      navigate('/login');
+    } 
+  }, [navigate, user]);
 
   async function fetchGetItems(item: string) {
     const items = await axios.get(
@@ -46,6 +46,7 @@ const Reserve = () => {
   return (
     <>
       <main className={styles.main}>
+      
         <div className={styles.boxWrapper}>
           <Box
             component="form"
@@ -58,7 +59,7 @@ const Reserve = () => {
               borderRadius: 10,
               py: 0,
               px: 4,
-              height: 600,
+              height: 650,
               width: 800,
               boxShadow: 10,
             }}
@@ -67,7 +68,7 @@ const Reserve = () => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <h1>設備予約</h1>
+                <h2 className={styles.title}>設備予約</h2>
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -89,6 +90,7 @@ const Reserve = () => {
                     設備を選択してください
                   </InputLabel>
                   <Select
+                    data-testid="select"
                     labelId="select-label"
                     id="demo-simple-select"
                     label="item"

@@ -26,6 +26,7 @@ function Pulldown({
         <FormControl fullWidth>
           <InputLabel id="select-label">詳細を選択してください</InputLabel>
           <Select
+            data-testid="select-detailSeg"
             labelId="select-label"
             id="demo-simple-select"
             label="detailitem"
