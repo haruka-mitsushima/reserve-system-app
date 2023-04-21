@@ -71,14 +71,16 @@ const ReserveBtn = () => {
 
     try {
       await axios.post(`http://localhost:8000/reservations`, addItems);
-      const req = await axios.get(`http://localhost:8000/users/${userId}`);
+      const req = await axios.get(
+        `http://localhost:8000/reservations?userId=${userId}`,
+      );
       const data = req.data;
-      const item = data.reservedItem;
-      item.push(addItems);
+      // const item = data.reservedItem;
+      // item.push(addItems);
       const statusMsg = await axios.patch(
         `http://localhost:8000/users/${userId}`,
         {
-          reservedItem: item,
+          reservedItem: data,
         },
       );
       // ユーザーのreservedItemを更新できたらsuccessの状態を更新する（テストのため）
