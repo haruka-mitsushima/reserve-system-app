@@ -21,7 +21,7 @@ const ItemBox = (item: Item) => {
       break;
   }
   return (
-    <Card onClick={() => navigate('/*')} data-testid="card">
+    <Card onClick={() => navigate(`/item/${item.id}`)} data-testid="card">
       <img src={imageUrl} alt={item.name} height={100} />
       <Typography
         component="p"
