@@ -9,8 +9,8 @@ import AddItem from './components/Management/AddItem';
 import Reserve from './components/Reserve/Reserve';
 import { Completed } from './components/Reserve/Completed';
 import MyPage from './components/MyPage';
-import { ItemPage } from './components/Items/ItemPage';
 import Edit from './components/Reserve/Edit';
+import ItemPage from './components/Items/ItemPage';
 import EditItem from './components/Management/EditItem';
 
 function App() {
