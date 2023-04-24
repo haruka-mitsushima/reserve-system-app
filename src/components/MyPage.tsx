@@ -53,42 +53,40 @@ export default function MyPage() {
             <Box sx={{ mt: 3 }}>
               {reservations.map((reservation: Reservation) => {
                 return (
-                  <>
-                    <Box sx={{ width: 800 }}>
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          mr: 1,
-                          border: 1,
-                          borderRadius: 5,
-                          paddingX: 4,
-                          marginY: 4,
-                        }}
-                      >
-                        <Grid container spacing={2} paddingY={4}>
-                          <Grid item xs={2.5}>
-                            {reservation.date}
-                          </Grid>
-                          <Grid item xs={3}>
-                            {reservation.startTime}~{reservation.endTime}
-                          </Grid>
-                          <Grid item xs={4.5}>
-                            {reservation.item.name}
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              fullWidth
-                              variant="contained"
-                              sx={{ fontSize: 16 }}
-                              onClick={() => clickHandler(reservation)}
-                            >
-                              編集
-                            </Button>
-                          </Grid>
+                  <Box sx={{ width: 800 }} key={reservation.id}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        mr: 1,
+                        border: 1,
+                        borderRadius: 5,
+                        paddingX: 4,
+                        marginY: 4,
+                      }}
+                    >
+                      <Grid container spacing={2} paddingY={4}>
+                        <Grid item xs={2.5}>
+                          {reservation.date}
                         </Grid>
-                      </Typography>
-                    </Box>
-                  </>
+                        <Grid item xs={3}>
+                          {reservation.startTime}~{reservation.endTime}
+                        </Grid>
+                        <Grid item xs={4.5}>
+                          {reservation.item.name}
+                        </Grid>
+                        <Grid item xs={2}>
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            sx={{ fontSize: 16 }}
+                            onClick={() => clickHandler(reservation)}
+                          >
+                            編集
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Typography>
+                  </Box>
                 );
               })}
             </Box>
