@@ -14,16 +14,17 @@ export const Completed = () => {
   let data = sessionStorage.getItem('auth');
 
   useEffect(() => {
-    let id;
-    const fetchUser = async () => {
+    let userId;
+    const fetchLatestReservation = async () => {
       if (data === null) {
         navigate('/login');
         return;
       }
       const tmp = JSON.parse(data);
-      id = tmp.id;
-      const result = await axios.get(`http://localhost:8000/users/${id}`);
-      if (result.data.reservedItem.length > 1) {;
+      userId = tmp.userId;
+      const result = await axios.get(`http://localhost:8000/users/${userId}`);
+
+      if (result.data.reservedItem.length >= 1) {
         let newReservation = await result.data.reservedItem.slice(-1)[0];
         newReservation = {
           ...newReservation,
@@ -34,10 +35,8 @@ export const Completed = () => {
         return setErrorMsg('Fetch Failed');
       }
     };
-    fetchUser();
+    fetchLatestReservation();
   }, [data, navigate]);
-
-  console.log(item);
 
   return (
     <>

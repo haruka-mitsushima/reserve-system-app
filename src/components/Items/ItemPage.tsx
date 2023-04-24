@@ -25,7 +25,7 @@ const ItemPage = () => {
         setIsEmpty(true);
       } else {
         let reservations = result.data;
-        reservations = reservations.map((item: any) => {
+        reservations = reservations.map((item: Reservation) => {
           return {
             ...item,
             date: item.date.replace(/-/g, `/`),
@@ -36,8 +36,6 @@ const ItemPage = () => {
     };
     fetchItem();
   }, [id, navigate, user]);
-
-  console.log(item);
 
   return (
     <>
