@@ -8,28 +8,39 @@ import { Reservation } from '../../types/Reservation';
 
 export const Completed = () => {
   const [item, setItem] = useState<Reservation>();
+  const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
   let data = sessionStorage.getItem('auth');
 
   useEffect(() => {
-    let id;
-    const fetchUser = async () => {
+    let userId;
+    const fetchLatestReservation = async () => {
       if (data === null) {
         navigate('/login');
         return;
       }
       const tmp = JSON.parse(data);
-      id = tmp.id;
-      const result = await axios.get(`http://localhost:8000/users/${id}`);
-      const newReservation = await result.data.reservedItem.slice(-1)[0];
-      setItem(newReservation);
+      userId = tmp.id;
+      const result = await axios.get(`http://localhost:8000/users/${userId}`);
+
+      if (result.data.reservedItem.length > 0) {
+        let newReservation = await result.data.reservedItem.slice(-1)[0];
+        newReservation = {
+          ...newReservation,
+          date: newReservation.date.replace(/-/g, `/`),
+        };
+        setItem(newReservation);
+      } else {
+        return setErrorMsg('Fetch Failed');
+      }
     };
-    fetchUser();
+    fetchLatestReservation();
   }, [data, navigate]);
 
   return (
     <>
+      {errorMsg}
       <div className={styles.boxWrapper}>
         <Box
           sx={{

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Reservation } from '../../types/Reservation';
 import styles from '../../styles/ItemPage.module.css';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-export const ItemPage = () => {
-  const [item, setItem] = useState<Reservation[]>();
+const ItemPage = () => {
+  const [item, setItem] = useState<Reservation[]>([]);
   const [isEmpty, setIsEmpty] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,7 +24,14 @@ export const ItemPage = () => {
       if (!result.data.length) {
         setIsEmpty(true);
       } else {
-        setItem(result.data);
+        let reservations = result.data;
+        reservations = reservations.map((item: Reservation) => {
+          return {
+            ...item,
+            date: item.date.replace(/-/g, `/`),
+          };
+        });
+        setItem(reservations);
       }
     };
     fetchItem();
@@ -83,3 +90,5 @@ export const ItemPage = () => {
     </>
   );
 };
+
+export default ItemPage;
