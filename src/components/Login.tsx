@@ -65,6 +65,7 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
+                data-testid="input-email"
                 id="email"
                 label="Email Address"
                 name="email"
@@ -79,6 +80,7 @@ export default function Login() {
                 name="password"
                 label="Password"
                 type="password"
+                data-testid="input-password"
                 id="password"
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
@@ -87,6 +89,7 @@ export default function Login() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                data-testid="button"
                 sx={{ mt: 3, mb: 2 }}
               >
                 ログイン

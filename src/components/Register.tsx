@@ -22,10 +22,10 @@ export default function Register() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!name || !email || !password) {
-      alert('未入力の項目があります');
-      return;
-    }
+    // if (!name || !email || !password) {
+    //   alert('未入力の項目があります');
+    //   return;
+    // }
     const result = await dispatch(
       fetchAsyncRegister({
         name: name,
@@ -78,6 +78,7 @@ export default function Register() {
                     name="name"
                     required
                     fullWidth
+                    data-testid="input-name"
                     id="name"
                     label="Name"
                     autoFocus
@@ -88,6 +89,7 @@ export default function Register() {
                   <TextField
                     required
                     fullWidth
+                    data-testid="input-email"
                     id="email"
                     label="Email Address"
                     name="email"
@@ -102,6 +104,7 @@ export default function Register() {
                     name="password"
                     label="Password"
                     type="password"
+                    data-testid="input-password"
                     id="password"
                     autoComplete="new-password"
                     onChange={(e) => setPassword(e.target.value)}
@@ -112,6 +115,7 @@ export default function Register() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                data-testid="button"
                 sx={{ mt: 3, mb: 2 }}
               >
                 ユーザー登録
