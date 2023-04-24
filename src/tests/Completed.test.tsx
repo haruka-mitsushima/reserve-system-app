@@ -48,7 +48,7 @@ const handlers = [
     return res(
       ctx.status(200),
       ctx.json({
-        name: 'モジャ',
+        name: 'test',
         email: 'test1@example.com',
         password: 'password',
         reservedItem: [
