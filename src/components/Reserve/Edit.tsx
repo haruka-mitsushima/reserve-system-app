@@ -1,4 +1,4 @@
-import { Button, createTheme, MenuItem, Select } from '@mui/material';
+import { Button, MenuItem, Select } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import FormControl from '@mui/material/FormControl';
@@ -6,27 +6,26 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Reservation } from '../../types/Reservation';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { times } from './time';
 
 const Edit = () => {
   const { id } = useParams();
 
   const fetchReservation = async () => {
-    const res = await axios(`http://localhost:8000/reservations?id=${id}`);
+    const res = await axios(`http://localhost:8000/reservations/${id}`);
     return res.data;
   };
 
-  const { data } = useQuery(['reserve'], fetchReservation);
-  const [reservation, setReservation] = useState<Reservation>(data[0]);
-
-  const [title, setTitle] = useState(reservation?.title);
-  const [date, setDate] = useState(reservation?.date);
-  const [startTime, setStartTime] = useState(reservation?.startTime);
-  const [endTime, setEndTime] = useState(reservation?.endTime);
+  const { data, refetch } = useQuery(['reserve'], fetchReservation);
+  const initialDate = data.date.replaceAll('/', '-');
+  const [title, setTitle] = useState(data.title);
+  const [date, setDate] = useState(initialDate);
+  const [startTime, setStartTime] = useState(data.startTime);
+  const [endTime, setEndTime] = useState(data.endTime);
+  const [userId, setUserId] = useState(0);
   const navigate = useNavigate();
 
   const updateReserve = {
@@ -35,18 +34,41 @@ const Edit = () => {
     startTime: startTime,
     endTime: endTime,
   };
+
+  const { mutate } = useMutation(
+    () =>
+      axios.patch(`http://localhost:8000/reservations/${id}`, updateReserve),
+    {
+      onSuccess: () => {
+        refetch();
+        navigate('/mypage');
+      },
+    },
+  );
   const submitHandler = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    axios
-      .patch(`http://localhost:8000/reservations/${id}`, updateReserve)
-      .then(() => navigate('/mypage'));
+    mutate();
   };
 
-  const deleteHandler = (e: { preventDefault: () => void }) => {
+  const authStorage = sessionStorage.getItem('auth');
+  useEffect(() => {
+    if (authStorage !== null) {
+      const user = JSON.parse(authStorage);
+      setUserId(user.id);
+    }
+  }, []);
+
+  const deleteHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    axios
-      .delete(`http://localhost:8000/reservations/${id}`)
-      .then(() => navigate('/mypage'));
+    await axios.delete(`http://localhost:8000/reservations/${id}`);
+    const res = await axios.get(
+      `http://localhost:8000/reservations?userId=${userId}`,
+    );
+    const updatedReservedItems = res.data;
+    await axios.patch(`http://localhost:8000/users/${userId}`, {
+      reservedItem: updatedReservedItems,
+    });
+    navigate('/mypage');
   };
 
   return (
@@ -78,7 +100,7 @@ const Edit = () => {
               <Grid item xs={12}>
                 <Box sx={{ textAlign: 'center', marginBottom: 4 }}>
                   <Typography component="h1" variant="h3">
-                    予約の更新： {reservation?.item.name}
+                    予約の更新： {data.name}
                   </Typography>
                 </Box>
               </Grid>

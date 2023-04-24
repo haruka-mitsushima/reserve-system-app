@@ -11,6 +11,7 @@ import { Completed } from './components/Reserve/Completed';
 import MyPage from './components/MyPage';
 import { ItemPage } from './components/Items/ItemPage';
 import Edit from './components/Reserve/Edit';
+import EditItem from './components/Management/EditItem';
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
           element={
             <Suspense fallback={<p>Loading...</p>}>
               <Edit />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/editItem/:id"
+          element={
+            <Suspense fallback={<p>Loading...</p>}>
+              <EditItem />
             </Suspense>
           }
         />
