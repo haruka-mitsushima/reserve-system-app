@@ -20,9 +20,8 @@ const Edit = () => {
   };
 
   const { data, refetch } = useQuery(['reserve'], fetchReservation);
-  const initialDate = data.date.replaceAll('/', '-');
   const [title, setTitle] = useState(data.title);
-  const [date, setDate] = useState(initialDate);
+  const [date, setDate] = useState(data.date);
   const [startTime, setStartTime] = useState(data.startTime);
   const [endTime, setEndTime] = useState(data.endTime);
   const [userId, setUserId] = useState(0);
@@ -56,7 +55,7 @@ const Edit = () => {
       const user = JSON.parse(authStorage);
       setUserId(user.id);
     }
-  }, []);
+  }, [authStorage]);
 
   const deleteHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
