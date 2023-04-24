@@ -127,18 +127,18 @@ const handlers = [
   }),
 ];
 
-const server = setupServer(...handlers);
+// const server = setupServer(...handlers);
 
-beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'bypass' });
-});
-afterEach(() => {
-  server.resetHandlers();
-  cleanup();
-});
-afterAll(() => {
-  server.close();
-});
+// beforeAll(() => {
+//   server.listen({ onUnhandledRequest: 'bypass' });
+// });
+// afterEach(() => {
+//   server.resetHandlers();
+//   cleanup();
+// });
+// afterAll(() => {
+//   server.close();
+// });
 
 describe('Reserve Component Test Case', () => {
   let store: Store<unknown, AnyAction>;

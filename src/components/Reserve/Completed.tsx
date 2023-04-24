@@ -24,7 +24,7 @@ export const Completed = () => {
       userId = tmp.userId;
       const result = await axios.get(`http://localhost:8000/users/${userId}`);
 
-      if (result.data.reservedItem.length >= 1) {
+      if (result.data.reservedItem.length > 0) {
         let newReservation = await result.data.reservedItem.slice(-1)[0];
         newReservation = {
           ...newReservation,
