@@ -62,24 +62,7 @@ const handlers = [
     }
   }),
   rest.post(`http://localhost:8000/reservations`, (req, res, ctx) => {
-    return res(
-      ctx.status(201),
-      ctx.json({
-        title: 'sample',
-        item: {
-          id: 2,
-          name: '社用車2',
-        },
-        date: '2023-04-20',
-        startTime: '10:00',
-        endTime: '11:00',
-        user: {
-          id: 1,
-          name: 'test',
-        },
-        id: 1,
-      }),
-    );
+    return res(ctx.status(201));
   }),
   rest.get(`http://localhost:8000/users/`, (req, res, ctx) => {
     const query = req.url.searchParams;
