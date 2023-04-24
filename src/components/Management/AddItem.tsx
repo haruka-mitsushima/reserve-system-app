@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import styles from '../styles/AddItem.module.css';
+import styles from '../../styles/AddItem.module.css';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -28,6 +28,7 @@ const MenuProps = {
 const AddItem = () => {
   const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState<string>('');
+  const [errMsg, setErrMsg] = useState<string>('');
 
   const handleChange = (event: SelectChangeEvent<typeof categoryName>) => {
     const {
@@ -42,6 +43,14 @@ const AddItem = () => {
     const name = data.get('name')?.toString();
     const category = data.get('category')?.toString();
     if (!name || !category) return;
+
+    const res = await axios.get(`http://localhost:8000/items?name=${name}`);
+    const existingItems = res.data;
+    if (existingItems.length > 0) {
+      setErrMsg(`${name}は既に登録されています`);
+      return;
+    }
+
     await axios.post('http://localhost:8000/items', { name, category });
     navigate('/');
   };
@@ -66,6 +75,16 @@ const AddItem = () => {
         <Typography component="h1" variant="h5">
           設備を追加する
         </Typography>
+        {errMsg && (
+          <Typography
+            component="h1"
+            variant="h6"
+            sx={{ color: 'red', mt: 2 }}
+            data-testid="errMsg"
+          >
+            {errMsg}
+          </Typography>
+        )}
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
