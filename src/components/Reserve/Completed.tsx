@@ -21,7 +21,7 @@ export const Completed = () => {
         return;
       }
       const tmp = JSON.parse(data);
-      userId = tmp.userId;
+      userId = tmp.id;
       const result = await axios.get(`http://localhost:8000/users/${userId}`);
 
       if (result.data.reservedItem.length > 0) {
