@@ -97,7 +97,7 @@ const AddItem = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl sx={{ width: 500 }}>
+              <FormControl sx={{ width: 500 }} required>
                 <InputLabel id="category">タグ</InputLabel>
                 <Select
                   data-testid="select"
