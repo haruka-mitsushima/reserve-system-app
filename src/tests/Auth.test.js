@@ -22,20 +22,18 @@ const handlers = [
     const query = req.url.searchParams;
     const email = query.get('email');
     const password = query.get('password');
-    if (email === 'maito@example.com') {
-      if (password === '1111') {
-        return res(
-          ctx.status(200),
-          ctx.json([
-            {
-              id: 1,
-              name: 'Murakami',
-              email: 'maito@example.com',
-              password: '1111',
-            },
-          ]),
-        );
-      }
+    if (email === 'maito@example.com' && password === '1111') {
+      return res(
+        ctx.status(200),
+        ctx.json([
+          {
+            id: 1,
+            name: 'Murakami',
+            email: 'maito@example.com',
+            password: '1111',
+          },
+        ]),
+      );
     }
   }),
 ];
