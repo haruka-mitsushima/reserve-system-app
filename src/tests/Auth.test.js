@@ -16,10 +16,21 @@ jest.mock('react-router-dom', () => ({
 
 const handlers = [
   rest.post('http://localhost:8000/users/', (req, res, ctx) => {
-    return res(ctx.status(201));
+    return res(ctx.status(201), ctx.json({ id: 3, name: 'Sakamoto' }));
   }),
-  rest.get('http://localhost:8000/users/1', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ id: 1, name: 'Momo' }));
+  rest.get('http://localhost:8000/users/', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        {
+          id: 1,
+          name: 'Murakami',
+          email: 'maito@example.com',
+          password: '1111',
+        },
+        { id: 2, name: 'Hirai', email: 'a@example.com', password: '1111' },
+      ]),
+    );
   }),
 ];
 
@@ -62,10 +73,24 @@ describe('Auth Component Test Cases', () => {
         <Register />
       </Provider>,
     );
+    const inputValueName = screen.getByPlaceholderText('user-name');
+    await userEvent.type(inputValueName, 'Sakamoto');
+    const inputValueEmail = screen.getByPlaceholderText('user-email');
+    await userEvent.type(inputValueEmail, 'a@example.com');
+    const inputValuePass = screen.getByPlaceholderText('user-password');
+    await userEvent.type(inputValuePass, '1111');
     await userEvent.click(screen.getByTestId('button'));
-    // await userEvent.click(screen.getByText('ユーザー登録'));
     expect(mockNavigate).toBeCalledWith('/login');
     expect(mockNavigate).toHaveBeenCalledTimes(1);
+  });
+  it('1-3: Should not route to LoginPage when registeration is rejected', async () => {
+    render(
+      <Provider store={store}>
+        <Register />
+      </Provider>,
+    );
+    await userEvent.click(screen.getByTestId('button'));
+    expect(mockNavigate).toHaveBeenCalledTimes(0);
   });
   it('2-1 should render all the elements correctly in Login Component', async () => {
     render(
@@ -76,5 +101,28 @@ describe('Auth Component Test Cases', () => {
     expect(screen.getByTestId('input-email')).toBeTruthy();
     expect(screen.getByTestId('input-password')).toBeTruthy();
     expect(screen.getByTestId('button')).toBeTruthy();
+  });
+  it('2-2: Should route to TopPage when login is successful', async () => {
+    render(
+      <Provider store={store}>
+        <Login />
+      </Provider>,
+    );
+    const inputValueEmail = screen.getByPlaceholderText('user-email');
+    await userEvent.type(inputValueEmail, 'maito@example.com');
+    const inputValuePass = screen.getByPlaceholderText('user-password');
+    await userEvent.type(inputValuePass, '1111');
+    await userEvent.click(screen.getByTestId('button'));
+    expect(mockNavigate).toBeCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+  });
+  it('1-3: Should not route to TopPage when login is rejected', async () => {
+    render(
+      <Provider store={store}>
+        <Login />
+      </Provider>,
+    );
+    await userEvent.click(screen.getByTestId('button'));
+    expect(mockNavigate).toHaveBeenCalledTimes(0);
   });
 });

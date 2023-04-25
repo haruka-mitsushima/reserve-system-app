@@ -17,17 +17,20 @@ export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!email || !password) {
+      setErrorMsg('未入力の項目があります');
+      return;
+    }
     const result = await dispatch(
       fetchAsyncLogin({ email: email, password: password }),
     );
     if (fetchAsyncLogin.fulfilled.match(result)) {
       navigate('/');
-    } else {
-      return;
     }
   };
 
@@ -55,6 +58,9 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Login
             </Typography>
+            <Typography component="h2" variant="h6">
+              {errorMsg}
+            </Typography>
             <Box
               component="form"
               noValidate
@@ -66,6 +72,7 @@ export default function Login() {
                 required
                 fullWidth
                 data-testid="input-email"
+                placeholder="user-email"
                 id="email"
                 label="Email Address"
                 name="email"
@@ -81,6 +88,7 @@ export default function Login() {
                 label="Password"
                 type="password"
                 data-testid="input-password"
+                placeholder="user-password"
                 id="password"
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}

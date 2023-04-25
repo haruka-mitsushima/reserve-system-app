@@ -19,13 +19,14 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // if (!name || !email || !password) {
-    //   alert('未入力の項目があります');
-    //   return;
-    // }
+    if (!name || !email || !password) {
+      setErrorMsg('未入力の項目があります');
+      return;
+    }
     const result = await dispatch(
       fetchAsyncRegister({
         name: name,
@@ -36,8 +37,6 @@ export default function Register() {
     );
     if (fetchAsyncRegister.fulfilled.match(result)) {
       navigate('/login');
-    } else {
-      return;
     }
   };
 
@@ -65,6 +64,9 @@ export default function Register() {
             <Typography component="h1" variant="h5">
               Register
             </Typography>
+            <Typography component="h2" variant="h6">
+              {errorMsg}
+            </Typography>
             <Box
               component="form"
               noValidate
@@ -79,6 +81,7 @@ export default function Register() {
                     required
                     fullWidth
                     data-testid="input-name"
+                    placeholder="user-name"
                     id="name"
                     label="Name"
                     autoFocus
@@ -90,6 +93,7 @@ export default function Register() {
                     required
                     fullWidth
                     data-testid="input-email"
+                    placeholder="user-email"
                     id="email"
                     label="Email Address"
                     name="email"
@@ -105,6 +109,7 @@ export default function Register() {
                     label="Password"
                     type="password"
                     data-testid="input-password"
+                    placeholder="user-password"
                     id="password"
                     autoComplete="new-password"
                     onChange={(e) => setPassword(e.target.value)}
