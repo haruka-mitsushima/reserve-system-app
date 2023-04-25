@@ -21,9 +21,10 @@ const ItemPage = () => {
       const result = await axios.get(
         `http://localhost:8000/reservations?item.id=${id}`,
       );
+
       if (!result.data.length) {
         setIsEmpty(true);
-      } else {
+      } else if (result.data.length > 0) {
         let reservations = result.data;
         reservations = reservations.map((item: Reservation) => {
           return {
@@ -66,7 +67,7 @@ const ItemPage = () => {
                 <div>
                   <Button
                     className={styles.btn}
-                    data-testid="btn-nav"
+                    data-testid={`btn-nav-${item.id}`}
                     type="submit"
                     variant="contained"
                     sx={{
@@ -77,7 +78,7 @@ const ItemPage = () => {
                       width: 150,
                       ':hover': { background: '#3b5a84' },
                     }}
-                    onClick={() => navigate(`/${item.id}`)}
+                    onClick={() => navigate(`/reserve/edit/${item.id}`)}
                   >
                     修正・削除
                   </Button>
