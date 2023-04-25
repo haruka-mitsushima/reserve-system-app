@@ -18,19 +18,25 @@ const handlers = [
   rest.post('http://localhost:8000/users/', (req, res, ctx) => {
     return res(ctx.status(201), ctx.json({ id: 3, name: 'Sakamoto' }));
   }),
-  rest.get('http://localhost:8000/users/', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          id: 1,
-          name: 'Murakami',
-          email: 'maito@example.com',
-          password: '1111',
-        },
-        { id: 2, name: 'Hirai', email: 'a@example.com', password: '1111' },
-      ]),
-    );
+  rest.get(`http://localhost:8000/users/`, (req, res, ctx) => {
+    const query = req.url.searchParams;
+    const email = query.get('email');
+    const password = query.get('password');
+    if (email === 'maito@example.com') {
+      if (password === '1111') {
+        return res(
+          ctx.status(200),
+          ctx.json([
+            {
+              id: 1,
+              name: 'Murakami',
+              email: 'maito@example.com',
+              password: '1111',
+            },
+          ]),
+        );
+      }
+    }
   }),
 ];
 
