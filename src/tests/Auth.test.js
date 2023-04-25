@@ -116,7 +116,7 @@ describe('Auth Component Test Cases', () => {
     expect(mockNavigate).toBeCalledWith('/');
     expect(mockNavigate).toHaveBeenCalledTimes(1);
   });
-  it('1-3: Should not route to TopPage when login is rejected', async () => {
+  it('2-3: Should not route to TopPage when login is rejected', async () => {
     render(
       <Provider store={store}>
         <Login />
