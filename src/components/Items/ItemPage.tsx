@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
 const ItemPage = () => {
-  const [item, setItem] = useState<Reservation[]>([]);
+  const [items, setItems] = useState<Reservation[]>([]);
   const [isEmpty, setIsEmpty] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const ItemPage = () => {
             date: item.date.replace(/-/g, `/`),
           };
         });
-        setItem(reservations);
+        setItems(reservations);
       }
     };
     fetchItem();
@@ -50,7 +50,7 @@ const ItemPage = () => {
         </div>
         <div>
           <ul>
-            {item?.map((item) => (
+            {items?.map((item) => (
               <li key={item.id} className={styles.list}>
                 <div className={styles.listContent}>
                   <p>{item.title}</p>
