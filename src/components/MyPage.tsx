@@ -47,7 +47,7 @@ export default function MyPage() {
               borderRadius: 10,
             }}
           >
-            <Typography component="h1" variant="h4">
+            <Typography component="h1" variant="h4" data-testid="reserve-title">
               現在の予約状況を表示しています。
             </Typography>
             <Box sx={{ mt: 3 }}>
@@ -65,20 +65,21 @@ export default function MyPage() {
                       }}
                     >
                       <Grid container spacing={2} paddingY={4}>
-                        <Grid item xs={2.5}>
+                        <Grid item xs={2.5} data-testid="list-1">
                           {reservation.date}
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={3} data-testid="list-2">
                           {reservation.startTime}~{reservation.endTime}
                         </Grid>
-                        <Grid item xs={4.5}>
+                        <Grid item xs={4.5} data-testid="list-3">
                           {reservation.item.name}
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} data-testid="list-4">
                           <Button
                             fullWidth
                             variant="contained"
                             sx={{ fontSize: 16 }}
+                            data-testid="edit-button"
                             onClick={() => clickHandler(reservation)}
                           >
                             編集
