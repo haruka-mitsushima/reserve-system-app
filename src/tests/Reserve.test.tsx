@@ -1,10 +1,4 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  within,
-} from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Reserve from '../components/Reserve/Reserve';
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit';
@@ -13,6 +7,7 @@ import { Provider } from 'react-redux';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { getUserInfo, sessionStorageMock } from './sessionStorage';
+import { selectOption } from './selectOption';
 
 // useNavigateのMock
 const mockNavigate = jest.fn();
@@ -23,6 +18,7 @@ jest.mock('react-router-dom', () => ({
 // windowオブジェクトのsessionStorageをsessionStorageMockプロパティに変更
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
+  writable: true,
 });
 
 const handlers = [
@@ -94,6 +90,13 @@ const server = setupServer(...handlers);
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'bypass' });
 });
+beforeEach(() => {
+  window.sessionStorage.setItem(
+    'auth',
+    JSON.stringify({ id: 1, name: 'test' }),
+  );
+  jest.restoreAllMocks();
+});
 afterEach(() => {
   server.resetHandlers();
   cleanup();
@@ -110,11 +113,6 @@ describe('Reserve Component Test Case', () => {
         addReserve: addReserveReducer,
       },
     });
-    window.sessionStorage.setItem(
-      'auth',
-      JSON.stringify({ id: 1, name: 'test' }),
-    );
-    getUserInfo();
   });
   it('should render all the elements correctlly', () => {
     render(
@@ -149,63 +147,97 @@ describe('Reserve Component Test Case', () => {
     const inputValue = screen.getByPlaceholderText('用途を記入してください');
     await userEvent.type(inputValue, 'sample');
 
-    // 設備のセレクトのテスト
-    const select = screen.getByTestId('select');
-    const button = within(select).getByRole('button') as HTMLInputElement;
-    await fireEvent.mouseDown(button);
-    const listbox = within(screen.getByRole('presentation')).getByRole(
-      'listbox',
-    );
-    const options = within(listbox).getAllByRole('option');
-    await userEvent.click(options[1]);
-    expect(button).toHaveTextContent('社用車');
+    // 設備のセレクト
+    await selectOption('select', 1, '社用車');
 
-    // 設備の詳細のテスト
-    const selectDetail = screen.getByTestId('select-detailSeg');
-    const btnDetail = within(selectDetail).getByRole(
-      'button',
-    ) as HTMLInputElement;
-    await fireEvent.mouseDown(btnDetail);
-    const listDetail = within(screen.getByRole('presentation')).getByRole(
-      'listbox',
-    );
-    const optionsDetail = within(listDetail).getAllByRole('option');
-    await userEvent.click(optionsDetail[0]);
-    expect(btnDetail).toHaveTextContent('社用車2');
+    // 設備の詳細のセレクト
+    await selectOption('select-detailSeg', 0, '社用車2');
 
-    // 日付のテスト
+    // 日付のセレクト
     const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
     fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
     expect(inputDate.value).toBe('2023-04-20');
 
-    // 開始時刻のテスト
-    const selectStart = screen.getByTestId('select-start');
-    const btnStart = within(selectStart).getByRole(
-      'button',
-    ) as HTMLInputElement;
-    await fireEvent.mouseDown(btnStart);
-    const listEnd = within(screen.getByRole('presentation')).getByRole(
-      'listbox',
-    );
-    const optionEnd = within(listEnd).getAllByRole('option');
-    await userEvent.click(optionEnd[2]);
-    expect(btnStart).toHaveTextContent('10:00');
+    // 開始時刻のセレクト
+    await selectOption('select-start', 2, '10:00');
 
-    // 終了時刻のテスト
-    const selectEnd = screen.getByTestId('select-end');
-    const btnEnd = within(selectEnd).getByRole('button') as HTMLInputElement;
-    await fireEvent.mouseDown(btnEnd);
-    const listStart = within(screen.getByRole('presentation')).getByRole(
-      'listbox',
-    );
-    const optionStart = within(listStart).getAllByRole('option');
-    await userEvent.click(optionStart[4]);
-    expect(btnEnd).toHaveTextContent('11:00');
+    // 終了時刻のセレクト
+    await selectOption('select-end', 4, '11:00');
 
     await userEvent.click(screen.getByTestId('btn-post'));
 
     expect(await screen.findByText('OK')).toBeInTheDocument();
     expect(mockNavigate).toBeCalledTimes(1);
     expect(mockNavigate).toBeCalledWith('/Completed');
+  });
+
+  it('should validation Msg when the input is Empty', async () => {
+    render(
+      <Provider store={store}>
+        <Reserve />
+      </Provider>,
+    );
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
+    await userEvent.click(screen.getByTestId('btn-post'));
+    expect(await screen.findByTestId('validation-1')).toBeTruthy();
+  });
+
+  it('should validation Msg when the startTims and endTime are not correct', async () => {
+    render(
+      <Provider store={store}>
+        <Reserve />
+      </Provider>,
+    );
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
+    // input項目を埋める
+    const inputValue = screen.getByPlaceholderText('用途を記入してください');
+    await userEvent.type(inputValue, 'sample');
+    await selectOption('select', 1, '社用車');
+    await selectOption('select-detailSeg', 0, '社用車2');
+    const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
+    fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
+    expect(inputDate.value).toBe('2023-04-20');
+    await selectOption('select-start', 4, '11:00');
+    await selectOption('select-end', 2, '10:00');
+    await userEvent.click(screen.getByTestId('btn-post'));
+    expect(await screen.findByTestId('validation-2')).toBeTruthy();
+  });
+
+  it('should render the ErrorMsg when fetch failed', async () => {
+    server.use(
+      rest.get(`http://localhost:8000/reservations`, (req, res, ctx) => {
+        return res(ctx.status(404));
+      }),
+    );
+    render(
+      <Provider store={store}>
+        <Reserve />
+      </Provider>,
+    );
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
+    // input項目を埋める
+    const inputValue = screen.getByPlaceholderText('用途を記入してください');
+    await userEvent.type(inputValue, 'sample');
+    await selectOption('select', 1, '社用車');
+    await selectOption('select-detailSeg', 0, '社用車2');
+    const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
+    fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
+    expect(inputDate.value).toBe('2023-04-20');
+    await selectOption('select-start', 2, '10:00');
+    await selectOption('select-end', 4, '11:00');
+    await userEvent.click(screen.getByTestId('btn-post'));
+    expect(await screen.findByTestId('errMsg')).toBeTruthy();
   });
 });
