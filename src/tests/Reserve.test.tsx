@@ -12,40 +12,15 @@ import addReserveReducer from '../features/addReserveSlice';
 import { Provider } from 'react-redux';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { getUserInfo, sessionStorageMock } from './sessionStorage';
 
+// useNavigateのMock
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-function getUserInfo() {
-  const userInfo = window.sessionStorage.getItem('auth');
-  if (userInfo) {
-    return JSON.parse(userInfo);
-  }
-  return {};
-}
-
-type StoreType = {
-  [key: string]: string;
-};
-
-const sessionStorageMock = (() => {
-  let store: StoreType = {};
-
-  return {
-    getItem(key: string) {
-      return store[key] || null;
-    },
-    setItem(key: string, value: string) {
-      store[key] = value.toString();
-    },
-    clear() {
-      store = {};
-    },
-  };
-})();
-
+// windowオブジェクトのsessionStorageをsessionStorageMockプロパティに変更
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
 });

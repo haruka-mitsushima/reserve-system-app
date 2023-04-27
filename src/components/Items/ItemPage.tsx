@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
 const ItemPage = () => {
-  const [item, setItem] = useState<Reservation[]>([]);
+  const [items, setItems] = useState<Reservation[]>([]);
   const [isEmpty, setIsEmpty] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,9 +21,10 @@ const ItemPage = () => {
       const result = await axios.get(
         `http://localhost:8000/reservations?item.id=${id}`,
       );
+
       if (!result.data.length) {
         setIsEmpty(true);
-      } else {
+      } else if (result.data.length > 0) {
         let reservations = result.data;
         reservations = reservations.map((item: Reservation) => {
           return {
@@ -31,7 +32,7 @@ const ItemPage = () => {
             date: item.date.replace(/-/g, `/`),
           };
         });
-        setItem(reservations);
+        setItems(reservations);
       }
     };
     fetchItem();
@@ -49,7 +50,7 @@ const ItemPage = () => {
         </div>
         <div>
           <ul>
-            {item?.map((item) => (
+            {items?.map((item) => (
               <li key={item.id} className={styles.list}>
                 <div className={styles.listContent}>
                   <p>{item.title}</p>
@@ -66,7 +67,7 @@ const ItemPage = () => {
                 <div>
                   <Button
                     className={styles.btn}
-                    data-testid="btn-nav"
+                    data-testid={`btn-nav-${item.id}`}
                     type="submit"
                     variant="contained"
                     sx={{
@@ -77,7 +78,7 @@ const ItemPage = () => {
                       width: 150,
                       ':hover': { background: '#3b5a84' },
                     }}
-                    onClick={() => navigate(`/${item.id}`)}
+                    onClick={() => navigate(`/reserve/edit/${item.id}`)}
                   >
                     修正・削除
                   </Button>

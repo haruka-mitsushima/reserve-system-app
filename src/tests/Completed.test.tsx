@@ -3,43 +3,18 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { Completed } from '../components/Reserve/Completed';
+import { getUserInfo, sessionStorageMock } from './sessionStorage';
 
+// useNavigateのMock
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-function getUserInfo() {
-  const userInfo = window.sessionStorage.getItem('auth');
-  if (userInfo) {
-    return JSON.parse(userInfo);
-  }
-  return {};
-}
-
-type StoreType = {
-  [key: string]: string;
-};
-
-const sessionStorageMock = (() => {
-  let store: StoreType = {};
-
-  return {
-    getItem(key: string) {
-      return store[key] || null;
-    },
-    setItem(key: string, value: string) {
-      store[key] = value.toString();
-    },
-    clear() {
-      store = {};
-    },
-  };
-})();
-
+// windowオブジェクトのsessionStorageをsessionStorageMockプロパティに変更
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
-  // 上書き可能にするため
+  // 書き込み可能にするため
   writable: true,
 });
 
