@@ -6,7 +6,6 @@ import { selectAdd, add } from '../../features/addReserveSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 const ReserveBtn = () => {
   const [err, setErr] = useState(false);
   const [isFilledIn, setIsFilledIn] = useState(true);
@@ -57,7 +56,7 @@ const ReserveBtn = () => {
     return true;
   }
 
-  // 時間指定が正しいかバリデーション
+  // 時間をNumberに変換する関数(バリデーションに使用)
   function timeConvert(time: string) {
     let hour_mins = time.replace(':', '');
     return Number(hour_mins);
@@ -76,6 +75,7 @@ const ReserveBtn = () => {
     } else {
       setIsFilledIn(true);
     }
+    // 時間指定のバリデーション
     if (startTime > endTime || startTime === endTime) {
       setTimeisCorrect(false);
       return;
@@ -107,7 +107,7 @@ const ReserveBtn = () => {
         }),
       );
     } catch (e) {
-        setErr(true);
+      setErr(true);
     }
   };
 
