@@ -60,7 +60,6 @@ describe('Auth Component Test Cases', () => {
   it('1-1: should render all the elements correctly', async () => {
     render(<MyPage />);
     expect(screen.getByTestId('reserve-title')).toBeTruthy();
-    expect(screen.getByTestId('list-1')).toBeTruthy();
-    expect(screen.getByTestId('list-2')).toBeTruthy();
+    expect(screen.getByTestId('button-1')).toBeTruthy();
   });
 });
