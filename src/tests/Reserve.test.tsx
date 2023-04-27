@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { getUserInfo, sessionStorageMock } from './sessionStorage';
-import { selectOption } from './selectOption';
+import { selectOption, selectDate, inputValue } from './selectOption';
 
 // useNavigateのMock
 const mockNavigate = jest.fn();
@@ -144,8 +144,8 @@ describe('Reserve Component Test Case', () => {
     expect(actualValue).toEqual({ id: 1, name: 'test' });
     expect(getItemSpy).toBeCalledWith('auth');
 
-    const inputValue = screen.getByPlaceholderText('用途を記入してください');
-    await userEvent.type(inputValue, 'sample');
+    // タイトルの記入
+    await inputValue('用途を記入してください', 'sample');
 
     // 設備のセレクト
     await selectOption('select', 1, '社用車');
@@ -154,9 +154,7 @@ describe('Reserve Component Test Case', () => {
     await selectOption('select-detailSeg', 0, '社用車2');
 
     // 日付のセレクト
-    const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
-    fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
-    expect(inputDate.value).toBe('2023-04-20');
+    await selectDate('date-input', '2023-04-20');
 
     // 開始時刻のセレクト
     await selectOption('select-start', 2, '10:00');
@@ -198,13 +196,10 @@ describe('Reserve Component Test Case', () => {
     expect(actualValue).toEqual({ id: 1, name: 'test' });
     expect(getItemSpy).toBeCalledWith('auth');
     // input項目を埋める
-    const inputValue = screen.getByPlaceholderText('用途を記入してください');
-    await userEvent.type(inputValue, 'sample');
+    await inputValue('用途を記入してください', 'sample');
     await selectOption('select', 1, '社用車');
     await selectOption('select-detailSeg', 0, '社用車2');
-    const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
-    fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
-    expect(inputDate.value).toBe('2023-04-20');
+    await selectDate('date-input', '2023-04-20');
     await selectOption('select-start', 4, '11:00');
     await selectOption('select-end', 2, '10:00');
     await userEvent.click(screen.getByTestId('btn-post'));
@@ -228,13 +223,10 @@ describe('Reserve Component Test Case', () => {
     expect(actualValue).toEqual({ id: 1, name: 'test' });
     expect(getItemSpy).toBeCalledWith('auth');
     // input項目を埋める
-    const inputValue = screen.getByPlaceholderText('用途を記入してください');
-    await userEvent.type(inputValue, 'sample');
+    await inputValue('用途を記入してください', 'sample');
     await selectOption('select', 1, '社用車');
     await selectOption('select-detailSeg', 0, '社用車2');
-    const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
-    fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
-    expect(inputDate.value).toBe('2023-04-20');
+    await selectDate('date-input', '2023-04-20');
     await selectOption('select-start', 2, '10:00');
     await selectOption('select-end', 4, '11:00');
     await userEvent.click(screen.getByTestId('btn-post'));
