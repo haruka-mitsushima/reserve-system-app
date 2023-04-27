@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Reserve from '../components/Reserve/Reserve';
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit';
@@ -6,40 +12,15 @@ import addReserveReducer from '../features/addReserveSlice';
 import { Provider } from 'react-redux';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { getUserInfo, sessionStorageMock } from './sessionStorage';
 
+// useNavigateのMock
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-function getUserInfo() {
-  const userInfo = window.sessionStorage.getItem('auth');
-  if (userInfo) {
-    return JSON.parse(userInfo);
-  }
-  return {};
-}
-
-type StoreType = {
-  [key: string]: string;
-};
-
-const sessionStorageMock = (() => {
-  let store: StoreType = {};
-
-  return {
-    getItem(key: string) {
-      return store[key] || null;
-    },
-    setItem(key: string, value: string) {
-      store[key] = value.toString();
-    },
-    clear() {
-      store = {};
-    },
-  };
-})();
-
+// windowオブジェクトのsessionStorageをsessionStorageMockプロパティに変更
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
 });
@@ -55,6 +36,57 @@ const handlers = [
       );
     }
   }),
+  rest.post(`http://localhost:8000/reservations`, (req, res, ctx) => {
+    return res(ctx.status(201));
+  }),
+  rest.get(`http://localhost:8000/users/`, (req, res, ctx) => {
+    const query = req.url.searchParams;
+    const userId = query.get('userId');
+    if (userId === '1') {
+      return res(
+        ctx.status(200),
+        ctx.json([
+          {
+            title: 'sample',
+            item: {
+              id: 2,
+              name: '社用車2',
+            },
+            date: '2023-04-20',
+            startTime: '10:00',
+            endTime: '11:00',
+            user: {
+              id: 1,
+              name: 'test',
+            },
+            id: 1,
+          },
+        ]),
+      );
+    }
+  }),
+  rest.patch(`http://localhost:8000/users/1`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        {
+          title: 'sample',
+          item: {
+            id: 2,
+            name: '社用車2',
+          },
+          date: '2023-04-20',
+          startTime: '10:00',
+          endTime: '11:00',
+          user: {
+            id: 1,
+            name: 'test',
+          },
+          id: 1,
+        },
+      ]),
+    );
+  }),
 ];
 
 const server = setupServer(...handlers);
@@ -64,6 +96,7 @@ beforeAll(() => {
 });
 afterEach(() => {
   server.resetHandlers();
+  cleanup();
 });
 afterAll(() => {
   server.close();
@@ -142,35 +175,37 @@ describe('Reserve Component Test Case', () => {
 
     // 日付のテスト
     const inputDate = screen.getByTestId('date-input') as HTMLInputElement;
-    fireEvent.change(inputDate, { target: { value: '2023-04-17' } });
-    expect(inputDate.value).toBe('2023-04-17');
+    fireEvent.change(inputDate, { target: { value: '2023-04-20' } });
+    expect(inputDate.value).toBe('2023-04-20');
 
     // 開始時刻のテスト
     const selectStart = screen.getByTestId('select-start');
-    const btnEnd = within(selectStart).getByRole('button') as HTMLInputElement;
-    await fireEvent.mouseDown(btnEnd);
+    const btnStart = within(selectStart).getByRole(
+      'button',
+    ) as HTMLInputElement;
+    await fireEvent.mouseDown(btnStart);
     const listEnd = within(screen.getByRole('presentation')).getByRole(
       'listbox',
     );
     const optionEnd = within(listEnd).getAllByRole('option');
-    await userEvent.click(optionEnd[0]);
-    expect(btnEnd).toHaveTextContent('9:00');
+    await userEvent.click(optionEnd[2]);
+    expect(btnStart).toHaveTextContent('10:00');
 
     // 終了時刻のテスト
-    const selectEnd = screen.getByTestId('select-start');
-    const btnStart = within(selectEnd).getByRole('button') as HTMLInputElement;
-    await fireEvent.mouseDown(btnStart);
+    const selectEnd = screen.getByTestId('select-end');
+    const btnEnd = within(selectEnd).getByRole('button') as HTMLInputElement;
+    await fireEvent.mouseDown(btnEnd);
     const listStart = within(screen.getByRole('presentation')).getByRole(
       'listbox',
     );
     const optionStart = within(listStart).getAllByRole('option');
-    await userEvent.click(optionStart[1]);
-    expect(btnStart).toHaveTextContent('9:30');
+    await userEvent.click(optionStart[4]);
+    expect(btnEnd).toHaveTextContent('11:00');
 
     await userEvent.click(screen.getByTestId('btn-post'));
 
     expect(await screen.findByText('OK')).toBeInTheDocument();
-    expect(mockNavigate).toBeCalledWith('/Completed');
     expect(mockNavigate).toBeCalledTimes(1);
+    expect(mockNavigate).toBeCalledWith('/Completed');
   });
 });

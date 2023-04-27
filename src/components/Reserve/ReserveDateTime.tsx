@@ -24,12 +24,10 @@ const ReserveDateTime = () => {
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
-              // yyyy-mm-ddをyyyy/mm/ddに変換
-              const formatDate = e.target.value.replace(/-/g, `/`);
               dispatch(
                 add({
                   ...addItems,
-                  date: formatDate,
+                  date: e.target.value,
                 }),
               );
             }}
@@ -71,6 +69,7 @@ const ReserveDateTime = () => {
               終了時刻を選択してください
             </InputLabel>
             <Select
+             data-testid="select-end"
               labelId="select-label"
               id="demo-simple-select"
               label="time"

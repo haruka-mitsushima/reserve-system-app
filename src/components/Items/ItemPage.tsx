@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Reservation } from '../../types/Reservation';
 import styles from '../../styles/ItemPage.module.css';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-export const ItemPage = () => {
-  const [item, setItem] = useState<Reservation[]>();
+const ItemPage = () => {
+  const [items, setItems] = useState<Reservation[]>([]);
   const [isEmpty, setIsEmpty] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,10 +21,18 @@ export const ItemPage = () => {
       const result = await axios.get(
         `http://localhost:8000/reservations?item.id=${id}`,
       );
+
       if (!result.data.length) {
         setIsEmpty(true);
-      } else {
-        setItem(result.data);
+      } else if (result.data.length > 0) {
+        let reservations = result.data;
+        reservations = reservations.map((item: Reservation) => {
+          return {
+            ...item,
+            date: item.date.replace(/-/g, `/`),
+          };
+        });
+        setItems(reservations);
       }
     };
     fetchItem();
@@ -42,7 +50,7 @@ export const ItemPage = () => {
         </div>
         <div>
           <ul>
-            {item?.map((item) => (
+            {items?.map((item) => (
               <li key={item.id} className={styles.list}>
                 <div className={styles.listContent}>
                   <p>{item.title}</p>
@@ -59,7 +67,7 @@ export const ItemPage = () => {
                 <div>
                   <Button
                     className={styles.btn}
-                    data-testid="btn-nav"
+                    data-testid={`btn-nav-${item.id}`}
                     type="submit"
                     variant="contained"
                     sx={{
@@ -70,7 +78,7 @@ export const ItemPage = () => {
                       width: 150,
                       ':hover': { background: '#3b5a84' },
                     }}
-                    onClick={() => navigate(`/${item.id}`)}
+                    onClick={() => navigate(`/reserve/edit/${item.id}`)}
                   >
                     修正・削除
                   </Button>
@@ -83,3 +91,5 @@ export const ItemPage = () => {
     </>
   );
 };
+
+export default ItemPage;
