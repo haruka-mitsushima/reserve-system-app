@@ -48,7 +48,7 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
       if (!action.payload[0]) {
-        alert('ログインに失敗しました');
+        return;
       } else {
         const obj = {
           id: action.payload[0].id,
