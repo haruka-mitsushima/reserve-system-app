@@ -4,11 +4,17 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import MyPage from '../components/MyPage';
+import { getUserInfo, sessionStorageMock } from './sessionStorage';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
+
+Object.defineProperty(window, 'sessionStorage', {
+  value: sessionStorageMock,
+  writable: true,
+});
 
 const handlers = [
   rest.get('http://localhost:8000/reservations', (req, res, ctx) => {
@@ -47,6 +53,13 @@ const server = setupServer(...handlers);
 
 beforeAll(() => {
   server.listen();
+});
+beforeEach(() => {
+  window.sessionStorage.setItem(
+    'auth',
+    JSON.stringify({ id: 1, name: 'Murakami' }),
+  );
+  jest.restoreAllMocks();
 });
 afterEach(() => {
   server.resetHandlers();
