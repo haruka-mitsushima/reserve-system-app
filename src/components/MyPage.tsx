@@ -40,20 +40,20 @@ export default function MyPage() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              paddingTop: 8,
-              paddingBottom: 8,
+              paddingY: 8,
               bgcolor: '#fff',
               boxShadow: 10,
               borderRadius: 10,
+              textAlign: 'center',
             }}
           >
-            <Typography component="h1" variant="h4">
+            <Typography component="h1" variant="h4" data-testid="reserve-title">
               現在の予約状況を表示しています。
             </Typography>
             <Box sx={{ mt: 3 }}>
               {reservations.map((reservation: Reservation) => {
                 return (
-                  <Box sx={{ width: 800 }} key={reservation.id}>
+                  <Box sx={{ width: 1000 }} key={reservation.id}>
                     <Typography
                       variant="h4"
                       sx={{
@@ -65,21 +65,33 @@ export default function MyPage() {
                       }}
                     >
                       <Grid container spacing={2} paddingY={4}>
-                        <Grid item xs={2.5}>
-                          {reservation.date}
+                        <Grid
+                          item
+                          xs={2}
+                          data-testid={`date-${reservation.id}`}
+                        >
+                          {reservation.date.replaceAll('-', '/')}
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid
+                          item
+                          xs={2}
+                          data-testid={`time-${reservation.id}`}
+                        >
                           {reservation.startTime}~{reservation.endTime}
                         </Grid>
-                        <Grid item xs={4.5}>
+                        <Grid item xs={2.5}>
+                          {reservation.title}
+                        </Grid>
+                        <Grid item xs={4}>
                           {reservation.item.name}
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={1.5}>
                           <Button
                             fullWidth
                             variant="contained"
                             sx={{ fontSize: 16 }}
                             onClick={() => clickHandler(reservation)}
+                            data-testid={`button-${reservation.id}`}
                           >
                             編集
                           </Button>
