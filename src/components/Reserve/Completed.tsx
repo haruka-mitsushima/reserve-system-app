@@ -7,8 +7,8 @@ import axios from 'axios';
 import { Reservation } from '../../types/Reservation';
 
 export const Completed = () => {
-  const [item, setItem] = useState<Reservation>();
-  const [errorMsg, setErrorMsg] = useState('');
+  const [newReservation, setNewRservation] = useState<Reservation>();
+  const [errorMsg, setErrorMsg] = useState(false);
   const navigate = useNavigate();
 
   let data = sessionStorage.getItem('auth');
@@ -20,19 +20,22 @@ export const Completed = () => {
         navigate('/login');
         return;
       }
-      const tmp = JSON.parse(data);
-      userId = tmp.id;
-      const result = await axios.get(`http://localhost:8000/users/${userId}`);
+      try {
+        const tmp = JSON.parse(data);
+        userId = tmp.id;
+        const result = await axios.get(`http://localhost:8000/users/${userId}`);
 
-      if (result.data.reservedItem.length > 0) {
-        let newReservation = await result.data.reservedItem.slice(-1)[0];
-        newReservation = {
-          ...newReservation,
-          date: newReservation.date.replace(/-/g, `/`),
-        };
-        setItem(newReservation);
-      } else {
-        return setErrorMsg('Fetch Failed');
+        if (result.data.reservedItem.length > 0) {
+          let newReservation = await result.data.reservedItem.slice(-1)[0];
+          newReservation = {
+            ...newReservation,
+            // yyyy-mm-ddをyyyy/mm/ddに変換
+            date: newReservation.date.replace(/-/g, `/`),
+          };
+          setNewRservation(newReservation);
+        }
+      } catch (e) {
+        setErrorMsg(true);
       }
     };
     fetchLatestReservation();
@@ -40,24 +43,13 @@ export const Completed = () => {
 
   return (
     <>
-      {errorMsg}
-      <div className={styles.boxWrapper}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: 'white',
-            borderRadius: 10,
-            py: 0,
-            px: 4,
-            height: 550,
-            width: 600,
-            boxShadow: 10,
-          }}
-        >
-          <h2 className={styles.title}>以下の予約が完了しました！</h2>
+      {errorMsg ? (
+        <div className={styles.error}>
+          <p data-testid="errorMsg">Fetch Failed</p>
+          <p>通信エラーです。時間を置いて再度お試しください。</p>
+        </div>
+      ) : (
+        <div className={styles.boxWrapper}>
           <Box
             sx={{
               display: 'flex',
@@ -68,40 +60,57 @@ export const Completed = () => {
               borderRadius: 10,
               py: 0,
               px: 4,
-              height: 400,
-              width: 400,
-              border: 1,
-              borderColor: '#999',
+              height: 550,
+              width: 600,
+              boxShadow: 10,
             }}
           >
-            <div className={styles.item}>
-              <p>タイトル：{item?.title}</p>
-              <p>設備：{item?.item.name}</p>
-              <p>日付：{item?.date}</p>
-              <p>開始時刻：{item?.startTime}</p>
-              <p>終了時刻：{item?.endTime}</p>
-              <p>ユーザー：{item?.user.name}</p>
-            </div>
+            <h2 className={styles.title}>以下の予約が完了しました！</h2>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: 'white',
+                borderRadius: 10,
+                py: 0,
+                px: 4,
+                height: 400,
+                width: 400,
+                border: 1,
+                borderColor: '#999',
+              }}
+            >
+              <div className={styles.item}>
+                <p>タイトル：{newReservation?.title}</p>
+                <p>設備：{newReservation?.item.name}</p>
+                <p>日付：{newReservation?.date}</p>
+                <p>開始時刻：{newReservation?.startTime}</p>
+                <p>終了時刻：{newReservation?.endTime}</p>
+                <p>ユーザー：{newReservation?.user.name}</p>
+              </div>
+            </Box>
+            <Button
+              className={styles.btn}
+              data-testid="button"
+              type="submit"
+              variant="contained"
+              sx={{
+                mt: 3,
+                mb: 2,
+                width: 200,
+                fontSize: 16,
+                bgcolor: '#4970a3',
+                ':hover': { background: '#3b5a84' },
+              }}
+              onClick={() => navigate('/reserve')}
+            >
+              続けて登録する
+            </Button>
           </Box>
-          <Button
-            className={styles.btn}
-            data-testid="button"
-            type="submit"
-            variant="contained"
-            sx={{
-              mt: 3,
-              mb: 2,
-              width: 200,
-              fontSize: 16,
-              bgcolor: '#4970a3',
-              ':hover': { background: '#3b5a84' },
-            }}
-            onClick={() => navigate('/reserve')}
-          >
-            続けて登録する
-          </Button>
-        </Box>
-      </div>
+        </div>
+      )}
     </>
   );
 };
