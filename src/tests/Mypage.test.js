@@ -66,7 +66,7 @@ afterAll(() => {
   server.close();
 });
 
-describe('Auth Component Test Cases', () => {
+describe('Mypage Component Test Cases', () => {
   it('1: should render all the elements correctly', async () => {
     render(<MyPage />);
     expect(screen.getByTestId('reserve-title')).toBeTruthy();
