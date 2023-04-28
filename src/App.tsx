@@ -44,7 +44,7 @@ function App() {
               <EditItem />
             </Suspense>
           }
-        />{' '}
+        />
         <Route path="/manage/select" element={<SelectEdit />} />
       </Routes>
     </Router>
