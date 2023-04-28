@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../styles/Top.module.css';
 import axios from 'axios';
-import Items from './Items';
 import { Item } from '../../types/Item';
 import { useNavigate } from 'react-router-dom';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import EditItems from './EditItems';
 
-const Top = () => {
+const SelectEdit = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState<Item[]>([]);
   const categories = ['会議室', '社用車', 'PC'];
@@ -21,22 +20,18 @@ const Top = () => {
 
   return (
     <div className={styles.Top}>
+      <Typography component="h1" variant="h3" fontWeight="bold" sx={{ mt: 5 }}>
+        編集する設備を選択してください
+      </Typography>
       {categories.map((category) => (
-        <Items
+        <EditItems
           key={category}
           category={category}
           items={items.filter((item) => item.category === category)}
         />
       ))}
-      <Grid container justifyContent="flex-end">
-        <Grid item>
-          <Link href="/manage" variant="body2">
-            {'管理画面はこちら'}
-          </Link>
-        </Grid>
-      </Grid>
     </div>
   );
 };
 
-export default Top;
+export default SelectEdit;

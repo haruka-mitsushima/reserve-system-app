@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import styles from '../../styles/AddItem.module.css';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -29,6 +29,13 @@ const AddItem = () => {
   const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState<string>('');
   const [errMsg, setErrMsg] = useState<string>('');
+
+  useEffect(() => {
+    const auth = sessionStorage.getItem('auth');
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleChange = (event: SelectChangeEvent<typeof categoryName>) => {
     const {

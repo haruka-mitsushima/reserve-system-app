@@ -13,7 +13,7 @@ import Edit from './components/Reserve/Edit';
 import ItemPage from './components/Items/ItemPage';
 import EditItem from './components/Management/EditItem';
 import ManagementTop from './components/Management/ManagementTop';
-import NewEditItem from './components/Management/NewEditItem';
+import SelectEdit from './components/Management/SelectEdit';
 
 function App() {
   return (
@@ -37,7 +37,6 @@ function App() {
         />
         <Route path="/manage" element={<ManagementTop />} />
         <Route path="/manage/addItem" element={<AddItem />} />
-        <Route path="/manage/editItem" element={<NewEditItem />} />
         <Route
           path="/manage/editItem/:id"
           element={
@@ -45,7 +44,8 @@ function App() {
               <EditItem />
             </Suspense>
           }
-        />
+        />{' '}
+        <Route path="/manage/select" element={<SelectEdit />} />
       </Routes>
     </Router>
   );
