@@ -9,6 +9,7 @@ import {
 import AddItem from '../components/Management/AddItem';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
+import { getUserInfo, sessionStorageMock } from './sessionStorage';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -26,6 +27,19 @@ const existingItemsMock = [
   },
 ];
 
+Object.defineProperty(window, 'sessionStorage', {
+  value: sessionStorageMock,
+  writable: true,
+});
+
+beforeEach(() => {
+  window.sessionStorage.setItem(
+    'auth',
+    JSON.stringify({ id: 1, name: 'test' }),
+  );
+  jest.restoreAllMocks();
+});
+
 describe('AddItem', () => {
   it('1 Should render all the elements correctly', () => {
     render(<AddItem />);
@@ -40,6 +54,10 @@ describe('AddItem', () => {
 
   it('2 Should add item and navigate top', async () => {
     render(<AddItem />);
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
     axiosMock.get.mockResolvedValue({ data: itemsMock });
     const inputValue = screen.getByRole('textbox');
     await userEvent.type(inputValue, 'ウィンドウズ');
@@ -75,6 +93,10 @@ describe('AddItem', () => {
 
   it('3 Should return if name is already existing', async () => {
     render(<AddItem />);
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
     axiosMock.get.mockResolvedValue({ data: existingItemsMock });
     const inputValue = screen.getByRole('textbox');
     await userEvent.type(inputValue, '大会議室');
@@ -101,6 +123,10 @@ describe('AddItem', () => {
 
   it('4 Should return if input is empty', async () => {
     render(<AddItem />);
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
     await userEvent.click(screen.getByTestId('button'));
     expect(mockNavigate).toHaveBeenCalledTimes(0);
   });
