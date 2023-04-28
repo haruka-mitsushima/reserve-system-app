@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -27,12 +27,19 @@ const MenuProps = {
 };
 
 const EditItem = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const auth = sessionStorage.getItem('auth');
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const { id } = useParams();
   const { data, refetch } = useQuery(['itemData'], () =>
     axios.get(`http://localhost:8000/items/${id}`).then((res) => res.data),
   );
 
-  const navigate = useNavigate();
   const [name, setName] = useState<string>(data.name);
   const [categoryName, setCategoryName] = useState<string>(data.category);
   const [errMsg, setErrMsg] = useState<string>('');
@@ -96,7 +103,7 @@ const EditItem = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          設備を追加する
+          設備を編集する
         </Typography>
         {errMsg && (
           <Typography

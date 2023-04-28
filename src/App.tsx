@@ -12,6 +12,8 @@ import MyPage from './components/MyPage';
 import Edit from './components/Reserve/Edit';
 import ItemPage from './components/Items/ItemPage';
 import EditItem from './components/Management/EditItem';
+import ManagementTop from './components/Management/ManagementTop';
+import SelectEdit from './components/Management/SelectEdit';
 
 function App() {
   return (
@@ -22,7 +24,6 @@ function App() {
         <Route path="/reserve" element={<Reserve />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/addItem" element={<AddItem />} />
         <Route path="/completed" element={<Completed />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/item/:id" element={<ItemPage />} />
@@ -34,14 +35,17 @@ function App() {
             </Suspense>
           }
         />
+        <Route path="/manage" element={<ManagementTop />} />
+        <Route path="/manage/addItem" element={<AddItem />} />
         <Route
-          path="/editItem/:id"
+          path="/manage/editItem/:id"
           element={
             <Suspense fallback={<p>Loading...</p>}>
               <EditItem />
             </Suspense>
           }
         />
+        <Route path="/manage/select" element={<SelectEdit />} />
       </Routes>
     </Router>
   );
