@@ -4,28 +4,32 @@ import { setupServer } from 'msw/node';
 import { cleanup, render, screen } from '@testing-library/react';
 import Top from '../components/Top/Top';
 import userEvent from '@testing-library/user-event';
+import { getUserInfo, sessionStorageMock } from './sessionStorage';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const sessionStorageMock = (() => {
-  let mockStorage: { [key: string]: string } = {};
-  return {
-    getItem(key: string) {
-      return mockStorage[key] || null;
-    },
-    setItem(key: string, value: string) {
-      mockStorage[key] = value;
-    },
-    clear() {
-      mockStorage = {};
-    },
-  };
-})();
+// const sessionStorageMock = (() => {
+//   let mockStorage: { [key: string]: string } = {};
+//   return {
+//     getItem(key: string) {
+//       return mockStorage[key] || null;
+//     },
+//     setItem(key: string, value: string) {
+//       mockStorage[key] = value;
+//     },
+//     clear() {
+//       mockStorage = {};
+//     },
+//   };
+// })();
 
-Object.defineProperty(window, 'sessionStorage', { value: sessionStorageMock });
+Object.defineProperty(window, 'sessionStorage', {
+  value: sessionStorageMock,
+  writable: true,
+});
 
 const handlers = [
   rest.get('http://localhost:8000/Items', (req, res, ctx) => {
@@ -68,6 +72,7 @@ beforeEach(() => {
     'auth',
     JSON.stringify({ id: 1, name: 'test' }),
   );
+  jest.restoreAllMocks();
 });
 
 afterEach(() => {
@@ -102,10 +107,10 @@ describe('Top', () => {
 
   it('2 Should navigate when click card', async () => {
     render(<Top />);
-    jest.spyOn(window.sessionStorage, 'getItem');
-    expect(window.sessionStorage.getItem('auth')).toEqual(
-      JSON.stringify({ id: 1, name: 'test' }),
-    );
+    const getItemSpy = jest.spyOn(window.sessionStorage, 'getItem');
+    const actualValue = getUserInfo();
+    expect(actualValue).toEqual({ id: 1, name: 'test' });
+    expect(getItemSpy).toBeCalledWith('auth');
     // console.log(window.sessionStorage.getItem.mock.calls); // 関数が呼び出された回数と引数を表示
     // console.log(window.sessionStorage.getItem.mock.results); // 関数の返り値を表示
     expect(await screen.findAllByTestId('card')).toBeTruthy();
